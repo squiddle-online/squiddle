@@ -1,1 +1,1 @@
-# squiddle
+# Squiddle
