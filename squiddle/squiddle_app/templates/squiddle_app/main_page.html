@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>  
+    <title>Home</title>
+    {% load static %}
+    <script src= {% static "squiddle_app/test.js" %}></script>
+</head>
+
+<body onload="start()">    
+    <h1>Test</h1>
+    <ul>
+        {% for item in list_items %}
+            <li id="{{ item.0 }}"> {{ item.1 }} </li>
+        {%endfor%}
+    </ul>
+
+    <button id="data" type="button" onclick="testClick()">Test</button>
+</body>    
+</html>
