@@ -1,0 +1,170 @@
+body {
+    background-color: #BBBBBB;
+    background-size: cover;
+}
+
+
+#header-container {
+    padding: 0px;
+    background: #333333;
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    height: 65px;
+}
+
+#title {
+    font-weight: 700;
+    font-size: 55px;
+    margin: 0;
+    padding-top: 5px;
+    color: #DDDDDD;
+    font-family: 'Qwigley';
+}
+
+#right-justify {
+    justify-content: flex-end;
+    padding: 0px;
+    text-align: right;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+#left-justify {
+    justify-content: flex-start;
+    padding: 0px;
+    text-align: left;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+}
+
+.header-icon {
+    font-size: 15px;
+    font-weight: bold;
+    color: #DDDDDD;
+    margin: 0px;
+    background: transparent;
+    border: none;
+    height: 100%;
+    padding: none;
+}
+
+.header-icon:hover {
+    background: #444444;
+}
+
+.header-icon:active {
+    border-bottom: none;
+    border-top: none;
+}
+
+.header-icon:focus,
+.header-icon:active:focus {
+    outline: none;
+}
+
+
+#action-menu {
+    position: fixed;
+    background-color: #444444;
+    padding-top: 10px;
+    padding-right: 40px;
+    padding-left: 10px;
+}
+
+.action {
+    font-weight: 400;
+    font-size: 12px;
+    font-family: 'Roboto', sans-serif;
+    color: #DDDDDD;
+    padding-left: 5px;
+    list-style-type: none;
+}
+
+#action-menu-button{
+    padding: 0px;
+    width: 60px;
+}
+
+#action-menu-button img {
+    width: 30px;
+    height: 30px;
+}
+
+#notification-display {
+    position: fixed;
+    background-color: #444444;
+    left: 85%;
+    width: 15%;
+    padding-top: 10px;
+    padding-right: 40px;
+    padding-left: 10px;
+}
+
+.notification {
+    color: #DDDDDD;
+    padding-left: 5px;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    list-style-type: none;
+}
+
+#notification-display-button {
+    padding: 0px;
+    width: 60px;
+}
+
+#notification-display-button img {
+    width: 30px;
+    height: 30px;
+}
+
+#meta-action-menu-button {
+    padding: 0px;
+    width: 60px;
+}
+
+#meta-action-menu-button img {
+    width: 30px;
+    height: 30px;
+}
+
+#meta-action-menu {
+    position: fixed;
+    background-color: #444444;
+    left: 85%;
+    width: 15%;
+    padding-top: 10px;
+    padding-right: 40px;
+    padding-left: 10px;
+}
+
+.meta-action {
+    color: #DDDDDD;
+    padding-left: 5px;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    list-style-type: none;
+}
+
+
+#asv-container {
+}
+
+/* Styles for classes set in JavaScript. */
+
+.toggled-button {
+    background: #444444;
+}
+
+.hidable .visible {
+    display: block;
+}
+
+.hidable .invisible{
+    display: none;
+}

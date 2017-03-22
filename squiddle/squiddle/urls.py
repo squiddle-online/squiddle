@@ -19,5 +19,5 @@ from squiddle_app import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.main_page),
+    url(r'^$', views.full_page),
 ]
