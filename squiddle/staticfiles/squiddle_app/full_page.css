@@ -1,0 +1,112 @@
+body {
+    background-color: #BBBBBB;
+    background-size: cover;
+}
+
+
+header .container-fluid {
+    padding: 1px 2px 1px 2px;
+    /*background-image: url("title-background.png");*/
+    background: #333333;
+}
+
+
+header .row {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+}
+
+#title {
+    font-weight: 700;
+    font-size: 55px;
+    margin: 0;
+    padding-top: 5px;
+    color: #DDDDDD;
+    font-family: 'Qwigley';
+}
+
+#right-justify {
+    justify-content: flex-end;
+    padding: 0px;
+    text-align: right;
+    width: 100%;
+}
+
+#left-justify {
+    justify-content: flex-start;
+    padding: 0px;
+    text-align: left;
+    width: 100%;
+}
+
+.header-icon {
+    font-size: 15px;
+    font-weight: bold;
+    color: #DDDDDD;
+    margin: 0px;
+    background: transparent;
+    border: none;
+    height: 60px;
+}
+
+.header-icon:hover {
+    background: #444444;
+}
+
+.header-icon:active {
+    border: 1px solid #111111;
+    border-bottom: none;
+}
+
+#action-menu {
+    padding-top: 20px;
+    position: fixed;
+    width: 200px;
+    height: 100%;
+    background-color: #444444;
+    border-right: 3px solid #333333;
+}
+
+#action-menu .action {
+    font-weight: 400;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: #DDDDDD;
+    padding-left: 5px;
+}
+
+#action-menu-button{
+    padding: 0px;
+    width: 60px;
+}
+
+#action-menu-button img {
+    width: 30px;
+    height: 30px;
+}
+
+#notification-display-button {
+    padding: 0px;
+    width: 60px;
+}
+
+#notification-display-button img {
+    width: 30px;
+    height: 30px;
+}
+
+#meta-action-menu-button {
+    padding: 0px;
+    width: 60px;
+}
+
+#meta-action-menu-button img {
+    width: 30px;
+    height: 30px;
+}
+
+
+#asv-container {
+}
+
