@@ -1,18 +1,3 @@
-
-
-function ButtonGroup() {
-    this.group = Array.from(arguments);
-}
-
-ButtonGroup.prototype.
-
-
-
-
-
-
-
-
 //! Called when the body is loaded.
 function init() {
     document.getElementById("action-menu-button").addEventListener("click", toggle_action_menu);
