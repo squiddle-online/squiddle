@@ -1,12 +1,12 @@
 body {
-    background-color: #BBBBBB;
+    background-color: #666666;
     background-size: cover;
 }
 
 
 #header-container {
     padding: 0px;
-    background: #333333;
+    background: #222222;
     display: flex;
     align-items: center;
     margin: 0px;
@@ -67,19 +67,25 @@ body {
 
 
 #action-menu {
-    position: fixed;
+    float: left;
     background-color: #444444;
+}
+
+#action-list {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
     padding-top: 10px;
-    padding-right: 40px;
-    padding-left: 10px;
 }
 
 .action {
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     font-family: 'Roboto', sans-serif;
     color: #DDDDDD;
-    padding-left: 5px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 10px;
     list-style-type: none;
 }
 
@@ -94,22 +100,25 @@ body {
 }
 
 #notification-display {
-    position: fixed;
+    float: right;
     background-color: #444444;
-    left: 85%;
-    width: 15%;
     padding-top: 10px;
-    padding-right: 40px;
-    padding-left: 10px;
 }
 
 .notification {
     color: #DDDDDD;
-    padding-left: 5px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 10px;
     font-weight: 400;
     font-family: 'Roboto', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     list-style-type: none;
+}
+
+#notification-list {
+    padding: 0px;
+    margin: 0px;
 }
 
 #notification-display-button {
@@ -133,26 +142,32 @@ body {
 }
 
 #meta-action-menu {
-    position: fixed;
+    float: right;
     background-color: #444444;
-    left: 85%;
-    width: 15%;
     padding-top: 10px;
-    padding-right: 40px;
-    padding-left: 10px;
 }
 
 .meta-action {
     color: #DDDDDD;
-    padding-left: 5px;
     font-weight: 400;
     font-family: 'Roboto', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     list-style-type: none;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 10px;
+}
+
+#meta-action-list {
+    padding: 0px;
+    margin: 0px;
 }
 
 
 #asv-container {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 /* Styles for classes set in JavaScript. */
