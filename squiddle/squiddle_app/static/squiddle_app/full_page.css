@@ -1,5 +1,5 @@
 body {
-    background-color: #666666;
+    background-color: #DDDDDD;
     background-size: cover;
 }
 
@@ -49,6 +49,7 @@ body {
     border: none;
     height: 100%;
     padding: none;
+    cursor: pointer;
 }
 
 .header-icon:hover {
@@ -69,6 +70,8 @@ body {
 #action-menu {
     float: left;
     background-color: #444444;
+    z-index: 1;
+    position: relative;
 }
 
 #action-list {
@@ -99,28 +102,6 @@ body {
     height: 30px;
 }
 
-#notification-display {
-    float: right;
-    background-color: #444444;
-    padding-top: 10px;
-}
-
-.notification {
-    color: #DDDDDD;
-    padding-left: 40px;
-    padding-right: 40px;
-    padding-bottom: 10px;
-    font-weight: 400;
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    list-style-type: none;
-}
-
-#notification-list {
-    padding: 0px;
-    margin: 0px;
-}
-
 #notification-display-button {
     padding: 0px;
     width: 60px;
@@ -129,6 +110,10 @@ body {
 #notification-display-button img {
     width: 30px;
     height: 30px;
+}
+
+#notification-display-button:hover {
+    background: transparent;
 }
 
 #meta-action-menu-button {
@@ -145,6 +130,8 @@ body {
     float: right;
     background-color: #444444;
     padding-top: 10px;
+    z-index: 1;
+    position: relative;
 }
 
 .meta-action {
@@ -168,6 +155,8 @@ body {
     display: block;
     width: 100%;
     height: 100%;
+    position: fixed;
+    z-index: 0;
 }
 
 /* Styles for classes set in JavaScript. */

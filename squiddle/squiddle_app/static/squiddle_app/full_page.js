@@ -11,7 +11,6 @@ function init() {
 function toggle_action_menu() {
     _toggle_container(header.action_menu);
     if (_toggle_button(this)) {
-        _close_container_if_open(header.notification_display_button, header.notification_display);
         _close_container_if_open(header.meta_action_menu_button, header.meta_action_menu);
     }
 }
@@ -19,17 +18,13 @@ function toggle_action_menu() {
 function toggle_meta_action_menu() {
     _toggle_container(header.meta_action_menu);
     if (_toggle_button(this)) {
-        _close_container_if_open(header.notification_display_button, header.notification_display);
         _close_container_if_open(header.action_menu_button, header.action_menu);
     }
 }
 
-function toggle_notification_display() {
-    _toggle_container(header.notification_display);
-    if (_toggle_button(this)) {
-        _close_container_if_open(header.meta_action_menu_button, header.meta_action_menu);
-        _close_container_if_open(header.action_menu_button, header.action_menu);
-    }
+function show_notification_display() {
+    _close_container_if_open(header.action_menu_button, header.action_menu);
+    _close_container_if_open(header.meta_action_menu_button, header.meta_action_menu);
 }
 
 
@@ -50,7 +45,7 @@ function _grab_elements() {
 function _register_callbacks() {
     header.action_menu_button.onclick = toggle_action_menu;
     header.meta_action_menu_button.onclick = toggle_meta_action_menu;
-    header.notification_display_button.onclick = toggle_notification_display;
+    header.notification_display_button.onclick = show_notification_display;
 }
 
 
