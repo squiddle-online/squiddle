@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}Squiddle{% endblock%}</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Qwigley:300,400,700' rel='stylesheet' type='text/css'>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static "base.css" %}">
+  {% block links%}{% endblock %}
+</head>
+<body onload="init()">
+  <header>
+    <div id="header-container" class="row container-fluid">
+      <div id="left-justify" class="col-md-4">
+        <button id="action-menu-button" class="col-md-4 header-icon">
+          <img src="{% static "squiddle_app/hamburger.png" %}"></img>
+        </button>
+      </div>
+      <h1 id="title" class="col-md-4 text-center">Squiddle</h1>
+      <div id="right-justify" class="col-md-4">
+        <button id="notification-display-button" class="header-icon">
+          <img src="{% static "squiddle_app/cog.png" %}"></img>
+        </button>
+        <button id="meta-action-menu-button" class="header-icon">
+          <img src="{% static "squiddle_app/cog.png" %}"></img>
+        </button>
+      </div>
+    </div>
+  </header>
+  <div>
+    <div id="action-menu" class="hidable invisible">
+      <ul id="action-list">
+        <li class="action"><a href="{% url 'edit_free_time' %}">Edit Free Time</a></li>
+        <li class="action"><a href="{% url 'create_group' %}">Create Group</a></li>
+        <li class="action"><a href="{% url 'manage_groups' %}">Manage Groups</a></li>
+        <li class="action"><a href="{% url 'view_schedules' %}">View Schedules</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="horizontal-align: right">
+    <div id="meta-action-menu" class="hidable invisible">
+      <ul id="meta-action-list">
+        <li class="meta-action"><a href="{% url 'profile' %}">Profile</a></li>
+        <li class="meta-action"><a href="{% url 'logout' %}?next={% url 'login' %}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="asv-container">
+    {% block asv %}{% endblock %}
+  </div>
+</body>
+  {% load static %}
+  <script type="text/JavaScript" src="{% static "base.js" %}"></script>
+  {% block js%}{% endblock %}
+</html>
+
