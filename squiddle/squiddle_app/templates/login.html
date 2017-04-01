@@ -5,6 +5,7 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>
+    <button type="submit" formmethod="get" formaction="{% url 'signup' %}">Login</button>
   </form>
 {% endblock%}
 

@@ -15,9 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from squiddle_app import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.full_page),
+    url(r'^$', views.home, name='home'),
+    url(r'^edit_free_time/', views.edit_free_time, name='edit_free_time'),
+    url(r'^create_group/', views.create_group, name='create_group'),
+    url(r'^manage_groups/', views.manage_groups, name='manage_groups'),
+    url(r'^view_schedules/', views.view_schedules, name='view_schedules'),
+    url(r'^profile/', views.profile, name='profile'),
+    url(r'^signup/', views.signup, name='signup'),
+
+    url(r'^login/', auth_views.login, {'template_name' : 'login.html'}, name='login'),
+    url(r'^logout/', auth_views.logout_then_login, name='logout'),
 ]
