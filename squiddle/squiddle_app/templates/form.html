@@ -1,0 +1,31 @@
+{% load extra_tags %}
+
+{% csrf_token %}
+{% if form.non_field_errors %}
+<div id="non-field-error-box" class="row">
+    {% for error in form.non_field_errors%}
+    <ul class="errorlist">
+        <li>{{ error }}</li>
+    </ul>
+    {% endfor%}
+</div>
+{% endif %}
+{% for field in form%}
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+        {{ field.errors }}
+    </div>
+</div>
+<div class="form-group row">
+    <div id="label-box">
+        <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label">{{ field.label }}</label>
+    </div>
+    <div class="col-md-8">
+        <input class="form-control" id="{{ field.id_for_label}}" type="{{ field|fieldtype}}" name="{{ field.name }}">
+        {% if field.help_text %}
+        <p class="helptext">{{ field.help_text|safe }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}

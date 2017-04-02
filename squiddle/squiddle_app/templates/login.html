@@ -1,11 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'form.css'%}">
+<link rel="stylesheet" href="{% static 'login.css'%}">
+<link rel="stylesheet" href="{% static 'centered_form.css'%}">
+{% endblock %}
 
 {% block asv%}
+<div id="container" class="col-xs-4 col-xs-offset-4">
   <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-    <button type="submit" formmethod="get" formaction="{% url 'signup' %}">Login</button>
+    {% include 'form.html' %}
+    <hr>
+    <div id="button-group">
+      <button type="submit" class="btn btn-info">Login</button>
+      <a href="{% url 'signup' %}" class="btn btn-success pull-right">Signup</a>
+    </div>
   </form>
+</div>
 {% endblock%}
 

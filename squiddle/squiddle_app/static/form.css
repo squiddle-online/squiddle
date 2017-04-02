@@ -1,0 +1,22 @@
+.errorlist li {
+    list-style: none;
+    color: #DD0000;
+    font-weight: bold;
+}
+
+#non-field-error-box {
+    border: 1px solid #DD0000;
+}
+
+#non-field-error-box .errorlist {
+    padding-left: 10px;
+}
+
+#button-group {
+    padding-top: 10px;
+}
+
+.helptext {
+    color: #888888;
+    font-weight: bold;
+}

@@ -1,0 +1,9 @@
+label {
+    font-family: Qwigley, sans-serif;
+    font-size: 28px;
+}
+
+button {
+    width: 150px;
+    height: 50px;
+}

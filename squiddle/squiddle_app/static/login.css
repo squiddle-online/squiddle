@@ -1,0 +1,24 @@
+label {
+    font-size: 35px;
+    font-family: Qwigley, sans-serif;
+    width: 100%;
+    margin: 0px;
+}
+
+#label-box {
+    padding-bottom: 5px; /* The font looks a little off-center without this. */
+}
+
+button {
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    padding: 0px;
+}
+
+#button-group .btn {
+    width: 150px;
+    height: 50px;
+    padding: 12px 12px;
+}
+

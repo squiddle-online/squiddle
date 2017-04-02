@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'form.css'%}">
+<link rel="stylesheet" href="{% static 'centered_form.css'%}">
+<link rel="stylesheet" href="{% static 'signup.css'%}">
+{% endblock %}
 
 {% block asv %}
-<h1>New Account</h1>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Create</button>
-</form>
+<div id="container" class="col-xs-4 col-xs-offset-4">
+  <form method="post" class="form-horizontal">
+    {% include 'form.html' %}
+    <hr>
+    <button type="submit" class="btn btn-success">Create</button>
+  </form>
+</div>
 {% endblock %}

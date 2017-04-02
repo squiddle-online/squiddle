@@ -7,7 +7,7 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Qwigley:300,400,700' rel='stylesheet' type='text/css'>
   {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static "base.css" %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
   {% block links%}{% endblock %}
 </head>
 <body onload="init()">
@@ -15,16 +15,18 @@
     <div id="header-container" class="row container-fluid">
       <div id="left-justify" class="col-md-4">
         <button id="action-menu-button" class="col-md-4 header-icon">
-          <img src="{% static "squiddle_app/hamburger.png" %}"></img>
+          <img src="{% static "hamburger.png" %}"></img>
         </button>
       </div>
       <h1 id="title" class="col-md-4 text-center">Squiddle</h1>
       <div id="right-justify" class="col-md-4">
         <button id="notification-display-button" class="header-icon">
-          <img src="{% static "squiddle_app/cog.png" %}"></img>
+          <a href="{% url 'view_notifications' %}">
+            <img src="{% static "notification_icon.png" %}"></img>
+          </a>
         </button>
         <button id="meta-action-menu-button" class="header-icon">
-          <img src="{% static "squiddle_app/cog.png" %}"></img>
+            <img src="{% static "meta.png" %}"></img>
         </button>
       </div>
     </div>

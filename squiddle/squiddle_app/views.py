@@ -4,12 +4,15 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse
-from . import forms
 
 
 def home(request):
     return redirect('view_schedules')
+
+
+@login_required
+def view_notifications(request):
+    return render(request, 'view_notifications.html')
 
 
 @login_required
@@ -49,7 +52,8 @@ def signup(request):
         else:
             return render(request, 'signup.html', context = {'form' : form})
     else:
-        if request.user.is_authenticated(): logout(request.user)
+        if request.user.is_authenticated():
+            logout(request.user)
         form = UserCreationForm()
         return render(request, 'signup.html', context = {'form' : form})
 

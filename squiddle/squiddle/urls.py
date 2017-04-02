@@ -21,6 +21,7 @@ from squiddle_app import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),
+    url(r'^notifications/', views.view_notifications, name='view_notifications'),
     url(r'^edit_free_time/', views.edit_free_time, name='edit_free_time'),
     url(r'^create_group/', views.create_group, name='create_group'),
     url(r'^manage_groups/', views.manage_groups, name='manage_groups'),
