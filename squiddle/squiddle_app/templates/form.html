@@ -10,7 +10,7 @@
     {% endfor%}
 </div>
 {% endif %}
-{% for field in form%}
+{% for field in form %}
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-8">
@@ -19,12 +19,20 @@
 </div>
 <div class="form-group row">
     <div id="label-box">
-        <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label">{{ field.label }}</label>
+        <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label">{{ field.label }}{{ form.label_suffix }}</label>
     </div>
     <div class="col-md-8">
-        <input class="form-control" id="{{ field.id_for_label}}" type="{{ field|fieldtype}}" name="{{ field.name }}">
-        {% if field.help_text %}
-        <p class="helptext">{{ field.help_text|safe }}</p>
+        {% if field.field.widget|widget_type == 'Select' %}
+            <select class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}">
+                {% for c in field.field.choices %}
+                    <option>{{ c.0 }}</option>
+                {% endfor %}
+            </select>
+        {% else %}
+            <input class="form-control" id="{{ field.id_for_label}}" type="{{ field|field_type}}" name="{{ field.name }}">
+            {% if field.help_text %}
+                <p class="helptext">{{ field.help_text|safe }}</p>
+            {% endif %}
         {% endif %}
     </div>
 </div>

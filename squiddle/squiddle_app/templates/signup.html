@@ -10,7 +10,8 @@
 {% block asv %}
 <div id="container" class="col-xs-4 col-xs-offset-4">
   <form method="post" class="form-horizontal">
-    {% include 'form.html' %}
+    {% include 'form.html' with form=user_form %}
+    {% include 'form.html' with form=member_form %}
     <hr>
     <button type="submit" class="btn btn-success">Create</button>
   </form>

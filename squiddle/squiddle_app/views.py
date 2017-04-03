@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
+from .forms import *
 
 
 def home(request):
@@ -42,19 +43,24 @@ def profile(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            raw_password = form.clean_password2()
+        user_form = UserCreationForm(request.POST)
+        member_form = MemberCreationForm(request.POST)
+        if user_form.is_valid() and member_form.is_valid():
+            user = user_form.save()
+            raw_password = user_form.clean_password2()
             user = authenticate(username=user.username, password=raw_password)
+            user.refresh_from_db()
+            user.member.timezone = member_form.cleaned_data['timezone']
+            user.save()
             login(request, user)
             return redirect('home')
         else:
-            return render(request, 'signup.html', context = {'form' : form})
+            return render(request, 'signup.html', context={'user_form': user_form, 'member_form': member_form})
     else:
         if request.user.is_authenticated():
-            logout(request.user)
-        form = UserCreationForm()
-        return render(request, 'signup.html', context = {'form' : form})
+            logout(request)
+        user_form = UserCreationForm()
+        member_form = MemberCreationForm()
+        return render(request, 'signup.html', context={'user_form': user_form, 'member_form': member_form})
 
 
