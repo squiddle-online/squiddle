@@ -9,16 +9,17 @@ label {
     padding-bottom: 5px; /* The font looks a little off-center without this. */
 }
 
+#button-group a {
+    width: 150px;
+    height: 50px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    text-align: center;
+}
+
 button {
     width: 150px;
     height: 50px;
     text-align: center;
-    padding: 0px;
-}
-
-#button-group .btn {
-    width: 150px;
-    height: 50px;
-    padding: 12px 12px;
 }
 
