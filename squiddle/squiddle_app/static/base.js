@@ -1,59 +1,58 @@
 var header = {};
 
-//! Called when the body is loaded.
-function init() {
-    _grab_elements();
-    _register_callbacks();
-}
+window.addEventListener("load", function() {
+    grabElements();
+    registerCallbacks();
+});
 
 // button click listeners
 
-function toggle_action_menu() {
-    _toggle_container(header.action_menu);
-    if (_toggle_button(this)) {
-        _close_container_if_open(header.meta_action_menu_button, header.meta_action_menu);
+function toggleActionMenu() {
+    toggleContainer(header.actionMenu);
+    if (toggleButton(this)) {
+        closeContainerIfOpen(header.metaActionMenuButton, header.metaActionMenu);
     }
 }
 
-function toggle_meta_action_menu() {
-    _toggle_container(header.meta_action_menu);
-    if (_toggle_button(this)) {
-        _close_container_if_open(header.action_menu_button, header.action_menu);
+function toggleMetaActionMenu() {
+    toggleContainer(header.metaActionMenu);
+    if (toggleButton(this)) {
+        closeContainerIfOpen(header.actionMenuButton, header.actionMenu);
     }
 }
 
-function show_notification_display() {
-    _close_container_if_open(header.action_menu_button, header.action_menu);
-    _close_container_if_open(header.meta_action_menu_button, header.meta_action_menu);
+function showNotificationDisplay() {
+    closeContainerIfOpen(header.actionMenuButton, header.actionMenu);
+    closeContainerIfOpen(header.metaActionMenuButton, header.metaActionMenu);
 }
 
 
 // Helpers
 
 
-function _grab_elements() {
-    header.action_menu = document.getElementById("action-menu");
-    header.action_menu_button = document.getElementById("action-menu-button");
+function grabElements() {
+    header.actionMenu = document.getElementById("action-menu");
+    header.actionMenuButton = document.getElementById("action-menu-button");
 
-    header.meta_action_menu = document.getElementById("meta-action-menu");
-    header.meta_action_menu_button = document.getElementById("meta-action-menu-button");
+    header.metaActionMenu = document.getElementById("meta-action-menu");
+    header.metaActionMenuButton = document.getElementById("meta-action-menu-button");
 
-    header.notification_display = document.getElementById("notification-display");
-    header.notification_display_button = document.getElementById("notification-display-button");
+    header.notificationDisplay = document.getElementById("notification-display");
+    header.notificationDisplayButton = document.getElementById("notification-display-button");
 }
 
-function _register_callbacks() {
-    header.action_menu_button.onclick = toggle_action_menu;
-    header.meta_action_menu_button.onclick = toggle_meta_action_menu;
-    header.notification_display_button.onclick = show_notification_display;
+function registerCallbacks() {
+    header.actionMenuButton.onclick = toggleActionMenu;
+    header.metaActionMenuButton.onclick = toggleMetaActionMenu;
+    header.notificationDisplayButton.onclick = showNotificationDisplay;
 }
 
 
-function _toggle_button(button) {
+function toggleButton(button) {
     return button.classList.toggle("toggled-button");
 }
 
-function _toggle_container(container) {
+function toggleContainer(container) {
     var justHid = container.classList.toggle("invisible");
     if (justHid) container.parentElement.style = "display:none;";
     else container.parentElement.style = "";
@@ -61,10 +60,10 @@ function _toggle_container(container) {
     return container.classList.toggle("visible");
 }
 
-function _close_container_if_open(button, container) {
+function closeContainerIfOpen(button, container) {
     if (container.classList.contains("visible")) {
-        _toggle_container(container);
-        _toggle_button(button);
+        toggleContainer(container);
+        toggleButton(button);
         return true;
     }
     return false;

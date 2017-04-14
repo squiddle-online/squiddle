@@ -18,7 +18,7 @@ def view_notifications(request):
 
 @login_required
 def edit_free_time(request):
-    return render(request, 'edit_free_time.html')
+    return render(request, 'edit_free_time.html', { 'form': TimeBlockForm()})
 
 
 @login_required

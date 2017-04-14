@@ -1,0 +1,9 @@
+.centered-container {
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-top: 100px;
+    height: 70%;
+    min-width: 1200px;
+    min-height: 600px;
+}
+

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block links %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "schedule_container.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "centered_container.css" %}">
+{% block extra-links %}
+{% endblock %}
+
+{% endblock%}
+
+{% block asv%}
+<div class="centered-container">
+    <div id="schedule-controls" class="col-xs-3" style="height: 100%;">
+        {% block controls %}
+        {% endblock %}
+    </div>
+    <div id="schedule-container" class="col-xs-9" style="height: 100%; padding-right: 0px;">
+        {% include 'schedule_view.html' %}
+    </div>
+</div>
+{% endblock%}
