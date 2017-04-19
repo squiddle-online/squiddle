@@ -4,10 +4,17 @@
     border: 1px solid white;
 }
 
-.blank-hour {
+.undecorated-cell {
+    border-top: 0px solid white;
     border: 1px solid white;
     border-right-color: #EFEFEF;
     text-align: center;
+}
+
+.hour-label {
+    margin-top: -10px;
+    padding-right: 5px;
+    padding-bottom: 10px;
 }
 
 .hour-container {
