@@ -1,12 +1,26 @@
 .schedule-table {
     width: 100%;
     height: 100%;
-    border: 1px solid black;
+    border: 1px solid white;
+}
+
+.blank-hour {
+    border: 1px solid white;
+    border-right-color: #EFEFEF;
+    text-align: center;
 }
 
 .hour-container {
     border: 1px solid black;
     border-color: #EFEFEF;
+    text-align: center;
+}
+
+.blank-day {
+    min-width: 75px;
+    border: 1px solid white;
+    color: white;
+    background-color: white;
     text-align: center;
 }
 
