@@ -23,10 +23,18 @@ label {
     font-size: 14px;
 }
 
-.btn {
-    width: 50%;
+#time-block-form-container {
+    margin-top: 50%;
+    padding-bottom: 10px;
 }
 
+#time-block-form label {
+    margin-top: 5px;
+}
+
+#time-block-form input {
+    height: 30px;
+}
 
 .btn:focus,
 .btn:active:focus {
