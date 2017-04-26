@@ -17,10 +17,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from squiddle_app import views
+from squiddle_app import services
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),
+    url(r'^services/', include(services.url_patterns)),
     url(r'^notifications/', views.view_notifications, name='view_notifications'),
     url(r'^edit-free-time/', views.edit_free_time, name='edit_free_time'),
     url(r'^create-group/', views.create_group, name='create_group'),
