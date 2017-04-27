@@ -1,10 +1,11 @@
 from django.conf.urls import url
-from django.http import JsonResponse
+from squiddle_app.rest_data import *
 
 
 def free_time(request):
-    free_time_json = {"foo": "bar"}
-    return JsonResponse(free_time_json)
+    w = WeeklySchedule()
+    w.add_block(Day.MONDAY, (0, 30), (1, 0))
+    return w.to_json_response()
 
 
 url_patterns = [

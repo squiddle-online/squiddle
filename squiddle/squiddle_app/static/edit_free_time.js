@@ -23,6 +23,7 @@ function pullFreeTime() {
     freeTimeRequest.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             freeTime = JSON.parse(this.responseText);
+            console.log(freeTime);
             showFreeTime();
         }
     }
@@ -47,8 +48,6 @@ function showFreeTime() {
     // Create a prototypical free time block to use in the loop.
     var block = new TimeBlock();
 
-    /*
-
     // for all days that this user has time blocks in...
     for (const day of freeTime.days) {
         // for all of the blocks on that day...
@@ -59,7 +58,6 @@ function showFreeTime() {
             scheduleManager.addTimeBlock(day, block);
         }
     }
-    */
 
     scheduleManager.show();
 }
