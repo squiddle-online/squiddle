@@ -12,6 +12,7 @@ window.addEventListener("load", function() {
     endTimeErrorList = document.getElementById("end-time-error-list");
 
     scheduleManager = new ScheduleManager(ScheduleType.FREE_TIME);
+    freeTime = new WeeklySchedule()
 
     pullFreeTime();
 });
@@ -22,8 +23,7 @@ function pullFreeTime() {
 
     freeTimeRequest.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            freeTime = JSON.parse(this.responseText);
-            console.log(freeTime);
+            freeTime.setJson(this.responseText);
             showFreeTime();
         }
     }
@@ -36,28 +36,18 @@ function pushFreeTime() {
     var pushRequest = new XMLHttpRequest();
     pushRequest.open("POST", "/services/free-time/", true);
     pushRequest.setRequestHeader("Content-type", "application/json");
-    pushRequest.send(JSON.stringify(freeTime));
+    pushRequest.send(freeTime.toJson());
 }
 
 function showFreeTime() {
-    if (freeTime.error) redirect();
+    if (freeTime.error()) redirect();
 
     scheduleManager.hide();
-    scheduleManager.clamp(freeTime.firstHour, freeTime.lastHour);
+    scheduleManager.clamp(freeTime.getFirstHour(), freeTime.getLastHour());
 
-    // Create a prototypical free time block to use in the loop.
-    var block = new TimeBlock();
-
-    // for all days that this user has time blocks in...
-    for (const day of freeTime.days) {
-        // for all of the blocks on that day...
-        for (const b of freeTime.blocks[day]) {
-            // copy over the start and end times and add the block to the schedule.
-            block.setStart(b.start);
-            block.setEnd(b.end);
-            scheduleManager.addTimeBlock(day, block);
-        }
-    }
+    for (const day of freeTime.days())
+        for (const b of freeTime.blocks()[day])
+            scheduleManager.addTimeBlock(day, b[0], b[1]);
 
     scheduleManager.show();
 }
@@ -66,6 +56,13 @@ function showFreeTime() {
 function redirect() {
     // Force reload from the server.
     window.location.reload(true);
+}
+
+function isValidTime(time) {
+    hour = time[0]
+    minute = time[1]
+    return hour >= 0 && hour <= 23 &&
+           minute >= 0 && minute <= 59
 }
 
 function addTimeBlock() {
@@ -79,21 +76,22 @@ function addTimeBlock() {
 
     var rawStartTime = document.getElementById("start-time").value;
     var rawEndTime = document.getElementById("end-time").value;
-    var timeRegex = /(\d):(\d)/;
+    var timeRegex = /(\d+):(\d+)/;
 
     var startMatch = rawStartTime.match(timeRegex);
     var endMatch = rawEndTime.match(timeRegex);
 
     // Show errors for invalid input and exit early if necessary.
 
-    if (!startMatch) {
+    console.log(startMatch.slice(1))
+    if (!startMatch || !isValidTime(startMatch.slice(1))) {
         startTimeErrorList.innerHTML = "<li class=\"error\">Invalid Start Time</li>";
         return;
     }
     else
         startTimeErrorList.innerHtml = "";
 
-    if (!endMatch) {
+    if (!endMatch || !isValidTime(endMatch.slice(1))) {
         endTimeErrorList.innerHTML = "<li class=\"error\">Invalid End Time</li>";
         return;
     }
@@ -104,9 +102,6 @@ function addTimeBlock() {
     // Check to see if the time block conflicts with the current schedule.
     // TODO: Get the selected day.
 
-
-//    for (var block of freeTime.blocks[0 /*Monday*/]) {
-//    }
 }
 
 function removeTimeBlock() {

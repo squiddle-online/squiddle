@@ -1,6 +1,5 @@
 from enum import IntEnum, unique
 from django.http import JsonResponse
-import json
 
 
 @unique
@@ -15,7 +14,11 @@ class Day(IntEnum):
 
 
 class WeeklySchedule:
-    def __init__(self):
+    def __init__(self, json=None):
+        if json:
+            self.json = json
+            return
+
         self.json = dict(
             blocks={
                 Day.MONDAY: [],
@@ -26,21 +29,29 @@ class WeeklySchedule:
                 Day.SATURDAY: [],
                 Day.SUNDAY: [],
             },
-            error=None
+            days=[],
         )
+        self.error = None
+        self.days = set()
 
-    def set_error(self, message):
-        self.json['error'] = message
+    def set_response_error(self, message):
+        self.error = message
 
-    def clear_error(self):
-        self.json['error'] = None
+    def clear_response_error(self):
+        self.error = None
+
+    def json_dict(self):
+        copy = dict(self.json)
+        copy['days'] = list(self.days)
+        return copy
 
     def add_block(self, day, start, end):
         blocks_for_day = self.json['blocks'][day]
 
         new_block = (start, end)  # Needed for comparison later.
         blocks_for_day.append(new_block)
-        blocks_for_day.sort()
+        # Sort blocks based on (start hour)*60 + start minute.
+        blocks_for_day.sort(key=lambda block: block[0][0]*60 + block[0][1])
 
         new_block_index = 0
         for i in range(0, len(blocks_for_day)-2):
@@ -66,8 +77,13 @@ class WeeklySchedule:
                 else:
                     blocks_for_day.pop(i+1)
                 return False
+
+        self.days.add(day)
         return True
 
     def to_json_response(self):
-        return JsonResponse(self.json, safe=False)
+        copy = dict(self.json)
+        copy['days'] = list(self.days)
+        copy['error'] = self.error
+        return JsonResponse(copy, safe=False)
 

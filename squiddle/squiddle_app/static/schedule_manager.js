@@ -1,32 +1,4 @@
-
-const WeekDay = {
-    MONDAY: 0,
-    TUESDAY: 1,
-    WEDNESDAY: 2,
-    THURSDAY: 3,
-    FRIDAY: 4,
-    SATURDAY: 5,
-    SUNDAY: 6,
-};
-
-const GroupColorPallet = [
-    // TODO: add rgb values here.
-];
-
-var TimeBlock = function(type, start, end) {
-    this.type = type;
-    this.valid = !start || !end;
-    this.start = start ? start : [0, 0];
-    this.end = end ? end : [0, 0];
-};
-
-TimeBlock.prototype.overlaps = function(block) {
-    return false;
-};
-
-TimeBlock.prototype.overlaps = function(start, end) {
-    return false;
-};
+// ScheduleManager
 
 const ScheduleVisibilityState = {
     SHOWN: 0,
@@ -37,6 +9,10 @@ const ScheduleType = {
     FREE_TIME: 0,
     GROUP: 1,
 };
+
+const GroupColorPallet = [
+    // TODO: add rgb values or whatever you need here.
+];
 
 var ScheduleManager = function(type) {
     // TODO: grab the schedule table by id and setup anything else.
@@ -52,25 +28,42 @@ ScheduleManager.prototype.type = function() {
     return this.type;
 };
 
-ScheduleManager.prototype.addTimeBlock = function(day, block) {
+ScheduleManager.prototype.addTimeBlock = function(day, start, end, groupNumber = -1) {
+    if (groupNumber != -1 && this.type == ScheduleType.FREE_TIME)
+        throw "Tried to add a group time block to a free time schedule.";
+    else if (!groupNumber && this.type == ScheduleType.GROUP)
+        throw "Tried to add a free time block to a group schedule.";
+
+    if (this.type == ScheduleType.FREE_TIME) {
+        // TODO: Quick and easy; add a free time styled block.
+        return;
+    }
+
+    // TODO: Add a group block using groupNumber to lookup colors in the GroupColorPallet or whatever works.
 };
 
-ScheduleManager.prototype.removeTimeBlock = function(day, block) {
+ScheduleManager.prototype.removeTimeBlock = function(day, start, end) {
+    // TODO:
 };
 
 ScheduleManager.prototype.clamp = function(minHour, maxHour) {
+    // TODO:
 };
 
 /** Hides the schedule table, making it invisible. */
 ScheduleManager.prototype.hide = function() {
+    // TODO:
 };
 
 /** Shows the schedule table. */
 ScheduleManager.prototype.show = function() {
+    // TODO:
 };
 
-/** Shows the schedule table. */
+/** Checks whether the schedule is visible.
+ * @returns true if the schedule is visible.
+ */
 ScheduleManager.prototype.visible = function() {
-    return false;
+    return this.visible;
 };
 
