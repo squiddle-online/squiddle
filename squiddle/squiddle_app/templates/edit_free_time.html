@@ -4,20 +4,85 @@
 
 {% block extra-links %}
 <link rel="stylesheet" type="text/css" href="{% static "edit_free_time.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "form.css" %}">
 {% endblock %}
 
 {% block js %}
 <script type="text/JavaScript" src="{% static "edit_free_time.js"%}"></script>
+<script type="text/JavaScript" src="{% static "weekly_schedule.js"%}"></script>
+<script type="text/JavaScript" src="{% static "schedule_manager.js"%}"></script>
 {% endblock %}
 
 {% block controls %}
 <div id="title-container">
     <h1 id="title">Edit Free Time</h1>
 </div>
-<div style="margin-top: 50%;">
+
+<div id="day-blocks-display" class row-fluid>
+    <div class="col-xs-5">
+        <select id="day-selector" class="form-control">
+            <option>Mon.</option>
+            <option>Tue.</option>
+            <option>Wed.</option>
+            <option>Thu.</option>
+            <option>Fri.</option>
+            <option>Sat.</option>
+            <option>Sun.</option>
+        </select>
+    </div>
+    <div id="block-list" class="col-xs-7">
+        <!-- Sample block entry:
+        <div class="block-entry">
+            <p class="block-label" style="display: inline-block;">8:00-9:00</p>
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        -->
+    </div>
+</div>
+
+<div id="time-block-form-container">
+    <ul id="general-error-list" class="errorlist">
+    </ul>
     <form id="time-block-form">
-        {{ form.as_p }}
-        <button id="add-time-block-button" type="button" class="btn btn-info">Add Time-Block</button>
+        <ul id="start-time-error-list" class="errorlist">
+        </ul>
+        <div class="form-group row">
+            <div class="col-xs-5">
+                <label for="start-time" class="col-form-label">Start Time:</label>
+            </div>
+            <div class="col-xs-4">
+                <input id="start-time" class="form-control"></input>
+            </div>
+        </div>
+
+        <ul id="end-time-error-list" class="errorlist">
+        </ul>
+        <div class="form-group row">
+            <div class="col-xs-5">
+                <label for="end-time" class="col-form-label">End Time:</label>
+            </div>
+            <div class="col-xs-4">
+                <input id="end-time" class="form-control"></input>
+            </div>
+        </div>
+
+        <div class="form-group row">
+        <div class="col-xs-9">
+            <button id="add-time-block-button" type="button" class="btn btn-info" style="width:100%;">
+            Add
+            </button>
+        </div>
+        </div>
     </form>
+</div>
+<div id="save-options" class="row=fluid">
+    <div id="save-schedule-col" class="col-xs-6">
+        <button id="save-schedule-button" type="button" class="btn btn-success">Save</button>
+    </div>
+    <div id="cancel-schedule-col" class="col-xs-6">
+        <button id="cancel-schedule-button" type="button" class="btn btn-danger">Cancel</button>
+    </div>
 </div>
 {% endblock%}

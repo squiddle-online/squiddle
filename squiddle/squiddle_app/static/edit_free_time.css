@@ -1,11 +1,12 @@
 #schedule-controls {
     border: 2px dashed #333333;
     min-width: 300px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 #title-container {
     text-align: center;
-    height: 4%;
     width: 100%;
 }
 
@@ -18,15 +19,82 @@
     font-size: 58px;
 }
 
+#day-blocks-display {
+    height: 40%;
+    padding-top: 10px;
+}
+
+#day-selector {
+    height: 30px;
+}
+
+#block-list {
+    overflow-y: auto;
+    height: 100%;
+}
+
+.block-entry {
+    height: 23px;
+    border-bottom: 1px dashed #333333;
+    margin-bottom: 2px;
+}
+
+.block-entry p {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: "Open Sans";
+    text-align: center;
+    display: inline-block;
+}
+
+.block-entry button:hover {
+    color: red;
+}
+
+.block-entry button:active {
+    color: #8b0000;
+}
+
+.block-entry button:focus,
+.block-entry button:active:focus {
+    outline: none;
+}
+
 label {
     font-family: "Open Sans", sans-serif;
     font-size: 14px;
 }
 
-.btn {
-    width: 50%;
+#time-block-form-container {
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-top: 10px;
 }
 
+#time-block-form label {
+    margin-top: 5px;
+}
+
+#time-block-form input {
+    height: 30px;
+}
+
+#save-schedule-button {
+    width: 100%;
+}
+#save-schedule-col {
+    padding-left: 10px;
+}
+
+#cancel-schedule-button{
+    width: 100%;
+}
+
+#save-options {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+}
 
 .btn:focus,
 .btn:active:focus {

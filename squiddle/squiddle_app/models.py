@@ -4,44 +4,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from timezone_field import TimeZoneField
-
-
-# Models
-
-class TimeBlock(models.Model):
-    class Day:
-        MONDAY = 0
-        TUESDAY = 1
-        WEDNESDAY = 2
-        THURSDAY = 3
-        FRIDAY = 4
-        SATURDAY = 5
-        SUNDAY = 6
-
-        CHOICES = (
-            (MONDAY, 'Monday'),
-            (TUESDAY, 'Tuesday'),
-            (WEDNESDAY, 'Wednesday'),
-            (THURSDAY, 'Thursday'),
-            (FRIDAY, 'Friday'),
-            (SATURDAY, 'Saturday'),
-            (SUNDAY, 'Sunday'),
-        )
-
-    parent_schedule = models.ForeignKey('WeeklySchedule', on_delete=models.CASCADE)
-    day = models.PositiveSmallIntegerField(choices=Day.CHOICES)
-    start_hour = models.PositiveSmallIntegerField()
-    start_minute = models.PositiveSmallIntegerField()
-    duration_hours = models.PositiveSmallIntegerField()
-    duration_minutes = models.PositiveSmallIntegerField()
-
-    def __str__(self):
-        start_hour = self.start_hour
-        start_minute = self.start_minute
-        return '%s, %.2d:%.2d-%.2d:%.2d' % \
-               (TimeBlock.Day.CHOICES[self.day][1], start_hour,
-                start_minute, start_hour + self.duration_hours,
-                start_minute + self.duration_minutes)
+from jsonfield import JSONField
+from squiddle_app import rest_data
+import json
 
 
 class WeeklySchedule(models.Model):
@@ -54,9 +19,11 @@ class WeeklySchedule(models.Model):
             (MEMBER_GROUP, 'GROUP'),
         )
 
+    # Model Fields
     parent_member = models.ForeignKey('Member', on_delete=models.CASCADE, null=True, blank=True)
     parent_group = models.ForeignKey('MemberGroup', on_delete=models.CASCADE, null=True, blank=True)
     parent_type = models.PositiveSmallIntegerField(choices=Parent.CHOICES)
+    json = JSONField(default=rest_data.WeeklySchedule().json_dict())
 
     def __str__(self):
         if self.parent_type == WeeklySchedule.Parent.MEMBER:
