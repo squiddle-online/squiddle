@@ -1,5 +1,6 @@
 from enum import IntEnum, unique
 from django.http import JsonResponse
+import copy
 
 
 @unique
@@ -17,6 +18,7 @@ class WeeklySchedule:
     def __init__(self, json=None):
         if json:
             self.json = json
+            self.days = set()
             return
 
         self.json = dict(
@@ -31,19 +33,11 @@ class WeeklySchedule:
             },
             days=[],
         )
-        self.error = None
         self.days = set()
 
-    def set_response_error(self, message):
-        self.error = message
-
-    def clear_response_error(self):
-        self.error = None
-
     def json_dict(self):
-        copy = dict(self.json)
-        copy['days'] = list(self.days)
-        return copy
+        self.json['days'] = list(self.days)
+        return self.json
 
     def add_block(self, day, start, end):
         # @Slow: no need for the sorting business, but whatever.
@@ -83,8 +77,7 @@ class WeeklySchedule:
         return True
 
     def to_json_response(self):
-        copy = dict(self.json)
-        copy['days'] = list(self.days)
-        copy['error'] = self.error
-        return JsonResponse(copy, safe=False)
+        print(self.json)
+        self.json['days'] = list(self.days)
+        return JsonResponse(self.json, safe=False)
 

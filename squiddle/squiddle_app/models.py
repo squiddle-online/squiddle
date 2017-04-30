@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from timezone_field import TimeZoneField
 from jsonfield import JSONField
 from squiddle_app import rest_data
+import json
 
 
 class WeeklySchedule(models.Model):
@@ -25,7 +26,7 @@ class WeeklySchedule(models.Model):
     json = JSONField(default=rest_data.WeeklySchedule().json_dict())
 
     def to_rest_proxy(self):
-        return rest_data.WeeklySchedule(self.json)
+        return rest_data.WeeklySchedule(json.loads(self.json))
 
     def __str__(self):
         if self.parent_type == WeeklySchedule.Parent.MEMBER:

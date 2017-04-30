@@ -133,7 +133,8 @@ function pushFreeTime() {
 
 /* Adds free time blocks to the schedule view. */
 function showFreeTime() {
-    if (freeTime.error()) redirect();
+    // TODO: check for invalid session.
+    //if (freeTime.error()) redirect();
 
     scheduleManager.hide();
     scheduleManager.clamp(freeTime.getFirstHour(), freeTime.getLastHour());
