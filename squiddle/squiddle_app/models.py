@@ -25,9 +25,6 @@ class WeeklySchedule(models.Model):
     parent_type = models.PositiveSmallIntegerField(choices=Parent.CHOICES)
     json = JSONField(default=rest_data.WeeklySchedule().json_dict())
 
-    def to_rest_proxy(self):
-        return rest_data.WeeklySchedule(json.loads(self.json))
-
     def __str__(self):
         if self.parent_type == WeeklySchedule.Parent.MEMBER:
             return 'Free Time of: %s' % self.parent_member.user.username
