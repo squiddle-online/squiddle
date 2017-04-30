@@ -210,6 +210,10 @@ WeeklySchedule.prototype.addTimeBlock = function(day, block) {
     return true;
 };
 
+WeeklySchedule.prototype.removeTimeBlock = function(day, index) {
+    this.repr.blocks[day].splice(index, 1);
+};
+
 WeeklySchedule.prototype.assign = function(schedule) {
     this.repr = schedule.repr;
 };

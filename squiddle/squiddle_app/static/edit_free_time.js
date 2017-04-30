@@ -72,9 +72,6 @@ function addTimeBlock() {
     start = start.map(Number);
     end = end.map(Number);
 
-    console.log(start);
-    console.log(end);
-
     var day = document.getElementById("day-selector").selectedIndex;
     if (!freeTime.addTimeBlock(day, new TimeBlock(start, end))) {
         generalErrorList.innerHTML = "<li>New Time-Block conflicts with current schedule.</li>";
@@ -87,7 +84,15 @@ function addTimeBlock() {
     populateBlockList(day);
 }
 
-function removeTimeBlock(day, index) {
+function removeTimeBlock(day, index, entry) {
+    // Remove the block from the schedule view.
+    var block = freeTime.blocks()[day][index];
+    scheduleManager.removeTimeBlock(day, block[0], block[1]);
+
+    // Remove the block from the json representation.
+    freeTime.removeTimeBlock(day, index);
+    // Remove the entry from the display.
+    entry.parentNode.removeChild(entry);
 }
 
 function dayChanged() {
@@ -115,7 +120,7 @@ function pullFreeTime() {
         if (this.readyState == 4 && this.status == 200) {
             freeTime.setJson(this.responseText);
             showFreeTime();
-            populateBlockList(WeekDay.MONDAY);
+            populateBlockList(document.getElementById("day-selector").selectedIndex);
         }
     }
 
@@ -153,22 +158,27 @@ function populateBlockList(day) {
     var list = document.getElementById("block-list");
     list.innerHTML = "";
 
-    for (const b of freeTime.blocks()[day]) {
-        var entry = document.createElement("div");
+    var blocks_for_day = freeTime.blocks()[day];
+    for (let i = 0; i < blocks_for_day.length; i++) {
+        let b = blocks_for_day[i];
+        let entry = document.createElement("div");
         entry.setAttribute("class", "block-entry");
 
-        var label = document.createElement("p");
+        let label = document.createElement("p");
         label.setAttribute("class", "block-label");
 
-        var startMinuteString = ('00' + b[0][1]).slice(-2);
-        var endMinuteString = ('00' + b[1][1]).slice(-2);
+        let startMinuteString = ('00' + b[0][1]).slice(-2);
+        let endMinuteString = ('00' + b[1][1]).slice(-2);
         label.innerHTML = b[0][0] + ":" + startMinuteString + "-" + b[1][0] + ":" + endMinuteString;
 
-        var button = document.createElement("button");
+        let button = document.createElement("button");
         button.setAttribute("class", "close");
         button.setAttribute("aria-label", "Close");
+        button.addEventListener("click", function() {
+            removeTimeBlock(day, i, entry);
+        });
 
-        var span = document.createElement("span");
+        let span = document.createElement("span");
         span.setAttribute("aria-hidden", "true");
 
         span.innerHTML = "&times;";
