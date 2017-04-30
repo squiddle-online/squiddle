@@ -46,6 +46,7 @@ class WeeklySchedule:
         return copy
 
     def add_block(self, day, start, end):
+        # @Slow: no need for the sorting business, but whatever.
         blocks_for_day = self.json['blocks'][day]
 
         new_block = (start, end)  # Needed for comparison later.

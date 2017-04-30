@@ -56,11 +56,13 @@ TimeBlock.prototype.isValid = function() {
         return false;
     }
 
-    // Check that the start time comes strictly before the end time.
+    // Check that the block isn't zero minutes long and the start time doesn't
+    // come after the end time.
+
     var convertedStartTime = startHour*60 + startMinute;
     var convertedEndTime = endHour*60 + endMinute;
 
-    if (convertedStartTime > convertedEndTime) return false;
+    if (convertedStartTime >= convertedEndTime) return false;
 
     return true;
 };
@@ -111,8 +113,8 @@ TimeBlock.prototype.overlapsRaw = function(start, end) {
     var convertedSecondStartTime = start[0]*60 + start[1];
     var convertedSecondEndTime = end[0]*60 + end[1];
 
-    return convertedFirstEndTime >= convertedSecondStartTime &&
-           convertedSecondEndTime <= convertedFirsStartTime;
+    return !(convertedFirstEndTime < convertedSecondStartTime ||
+           convertedSecondEndTime < convertedFirstStartTime);
 };
 
 TimeBlock.prototype.equals = function(other) {
@@ -169,8 +171,8 @@ WeeklySchedule.prototype.detail.constrainHours = function() {
     if (this.repr) {
         for (const day of this.repr.days) {
             for (const b of this.repr.blocks[day]) {
-                var candidateFirstHour = b[0][0]
-                var candidateLastHour = b[1][0]
+                var candidateFirstHour = b[0][0];
+                var candidateLastHour = b[1][0];
                 if (candidateFirstHour > this.firstHour)
                     this.firstHour = candidateFirstHour;
 
@@ -179,6 +181,33 @@ WeeklySchedule.prototype.detail.constrainHours = function() {
             }
         }
     }
+};
+
+WeeklySchedule.prototype.addTimeBlock = function(day, block) {
+    var blocks_for_day = this.repr.blocks[day];
+
+    if (blocks_for_day.length == 0) {
+        blocks_for_day.push([block.getStart(), block.getEnd()]);
+        return true;
+    }
+
+    for (const b of blocks_for_day)
+        if (block.overlapsRaw(b[0], b[1])) return false;
+
+    // @Slow. We could just manually insert it where it needs to go.
+    blocks_for_day.push([block.getStart(), block.getEnd()]);
+    blocks_for_day.sort(function (b1, b2) {
+        let firstStart = b1[0][0]*60 + b1[0][1];
+        let firstEnd = b1[1][0]*60 + b1[1][1];
+        let secondStart = b2[0][0]*60 + b2[0][1];
+        let secondEnd = b2[1][0]*60 + b2[1][1];
+
+        if (firstStart < secondStart) return -1;
+        else if (firstStart > secondStart) return 1;
+        else return 0; // equal as long as no overlapping block was inserted.
+    });
+
+    return true;
 };
 
 WeeklySchedule.prototype.assign = function(schedule) {

@@ -8,6 +8,8 @@ var scheduleManager = null;
 window.addEventListener("load", function() {
     document.getElementById("add-time-block-button").addEventListener("click", addTimeBlock);
     document.getElementById("day-selector").addEventListener("change", dayChanged);
+    document.getElementById("save-schedule-button").addEventListener("click", save);
+    document.getElementById("cancel-schedule-button").addEventListener("click", cancel);
 
     startTimeErrorList = document.getElementById("start-time-error-list");
     endTimeErrorList = document.getElementById("end-time-error-list");
@@ -39,7 +41,9 @@ function addTimeBlock() {
     // Show errors for invalid input and exit early if necessary.
 
     var wasError = false;
-    if (startMatch && isValidTime(startMatch.slice(1))) {
+
+    var start = startMatch ? startMatch.slice(1) : null;
+    if (startMatch && isValidTime(start)) {
         startTimeErrorList.innerHTML = "";
     }
     else {
@@ -47,7 +51,8 @@ function addTimeBlock() {
         wasError = true;
     }
 
-    if (endMatch && isValidTime(endMatch.slice(1))) {
+    var end = endMatch ? endMatch.slice(1) : null;
+    if (endMatch && isValidTime(end)) {
         endTimeErrorList.innerHTML = "";
     }
     else {
@@ -57,17 +62,44 @@ function addTimeBlock() {
 
     if (wasError) return;
 
-    // Check to see if the time block conflicts with the current schedule.
-    // TODO: Get the selected day.
+    var generalErrorList = document.getElementById("general-error-list");
 
+    if (start[0] == end[0] && start[1] == end[1]) {
+        generalErrorList.innerHTML = "<li>Start and end times must differ.</li>";
+        return;
+    }
+
+    start = start.map(Number);
+    end = end.map(Number);
+
+    console.log(start);
+    console.log(end);
+
+    var day = document.getElementById("day-selector").selectedIndex;
+    if (!freeTime.addTimeBlock(day, new TimeBlock(start, end))) {
+        generalErrorList.innerHTML = "<li>New Time-Block conflicts with current schedule.</li>";
+        return;
+    }
+    else {
+        generalErrorList.innerHTML = "";
+    }
+
+    populateBlockList(day);
 }
 
 function removeTimeBlock(day, index) {
-
 }
 
 function dayChanged() {
     populateBlockList(this.selectedIndex);
+}
+
+function save() {
+    pushFreeTime();
+}
+
+function cancel() {
+    pullFreeTime();
 }
 
 // Helpers
