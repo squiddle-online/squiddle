@@ -168,17 +168,18 @@ WeeklySchedule.prototype.setJson = function(json) {
 WeeklySchedule.prototype.detail = {};
 WeeklySchedule.prototype.detail.constrainHours = function() {
     // Find the earliest and latest needed hour (useful for display).
+    // This assumes the blocks are sorted and don't overlap.
     if (this.repr) {
         for (const day of this.repr.days) {
-            for (const b of this.repr.blocks[day]) {
-                var candidateFirstHour = b[0][0];
-                var candidateLastHour = b[1][0];
-                if (candidateFirstHour > this.firstHour)
-                    this.firstHour = candidateFirstHour;
+            var blocks = this.repr.blocks[day];
+            var candidateFirstHour = blocks[0][0][0];
+            var candidateLastHour = blocks[blocks.length-1][1][0];
 
-                if (candidateLastHour < this.lastHour)
-                    this.lastHour = candidateLastHour;
-            }
+            if (candidateFirstHour > this.firstHour)
+                this.firstHour = candidateFirstHour;
+
+            if (candidateLastHour < this.lastHour)
+                this.lastHour = candidateLastHour;
         }
     }
 };
