@@ -1,6 +1,5 @@
 from enum import IntEnum, unique
 from django.http import JsonResponse
-import copy
 
 
 @unique
@@ -77,7 +76,6 @@ class WeeklySchedule:
         return True
 
     def to_json_response(self):
-        print(self.json)
         self.json['days'] = list(self.days)
         return JsonResponse(self.json, safe=False)
 

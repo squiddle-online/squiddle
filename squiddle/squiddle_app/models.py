@@ -6,7 +6,6 @@ from django.dispatch import receiver
 from timezone_field import TimeZoneField
 from jsonfield import JSONField
 from squiddle_app import rest_data
-import json
 
 
 class WeeklySchedule(models.Model):
