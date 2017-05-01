@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block links%}
+<link rel="stylesheet" type="text/css" href="{% static "centered_container.css" %}">
 {% endblock%}
+
 {% block js%}
 {% endblock%}
+
 {% block asv%}
-<h1>Notification Display Stub</h1>
+<div class="centered-container">
+    <h1>Notification Display Stub</h1>
+</div>
 {% endblock%}
