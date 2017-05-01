@@ -147,7 +147,7 @@ TimeBlock.prototype.getEnd = function() {
 TimeBlock.prototype.toString = function() {
     return "" + this.start[0] + ":" + this.start[1] + "-" +
            this.end[0] + ":" + this.end[1];
-}
+};
 
 // WeeklySchedule
 
