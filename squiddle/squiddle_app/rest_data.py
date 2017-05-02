@@ -1,5 +1,6 @@
 from enum import IntEnum, unique
 from django.http import JsonResponse
+from squiddle_app import models
 
 
 @unique
@@ -78,4 +79,77 @@ class WeeklySchedule:
     def to_json_response(self):
         self.json['days'] = list(self.days)
         return JsonResponse(self.json, safe=False)
+
+
+class Notification:
+    def __init__(self, **kwargs):
+        self.json = {
+            'type': kwargs['type'],
+            'sender': kwargs['sender'],
+            'receiver': kwargs['receiver'],
+            'data': kwargs['data']
+        }
+
+    def set_message(self, message):
+        self.json['message'] = message
+
+    def get_message(self):
+        return self.json['message']
+
+    def set_sender(self, sender):
+        self.json['sender'] = sender
+
+    def get_sender(self):
+        return self.json['sender']
+
+    def set_receiver(self, receiver):
+        self.json['receiver'] = receiver
+
+    def get_receiver(self):
+        return self.json['receiver']
+
+    def to_json_response(self):
+        assert Notification.__has_valid_json(self.json), 'JSON representation not complete.'
+        return JsonResponse(self.json, safe=False)
+
+    @classmethod
+    def __has_valid_json(cls, json):
+        for v in json.values():
+            if isinstance(v, dict):
+                if not Notification.__has_valid_json(v):
+                    return False
+            if not v:
+                return False
+        return True
+
+
+class InvitationNotification(Notification):
+    def __init__(self, **kwargs):
+        kwargs['type'] = models.Notification.Type.INVITATION
+        kwargs['data'] = {
+            'group_name': kwargs['group_name'],
+            'group_id': kwargs['group_id'],
+        }
+        super().__init__(**kwargs)
+
+
+class InvitationDeclineNotification(Notification):
+    def __init__(self, **kwargs):
+        kwargs['type'] = models.Notification.Type.INVITATION_DECLINED
+        kwargs['data'] = {
+            'sender_name': kwargs['sender_name'],
+        }
+        super().__init__(**kwargs)
+
+
+class InvitationAcceptNotification(Notification):
+    def __init__(self, **kwargs):
+        kwargs['type'] = models.Notification.Type.INVITATION_ACCEPTED
+        kwargs['data'] = {
+            'sender_name': kwargs['sender_name'],
+        }
+        super().__init__(**kwargs)
+
+
+
 
