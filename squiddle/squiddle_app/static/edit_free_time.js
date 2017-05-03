@@ -133,7 +133,6 @@ function pushFreeTime() {
     var pushRequest = new XMLHttpRequest();
     pushRequest.open("POST", "/services/free-time/", true);
     pushRequest.setRequestHeader("Content-type", "application/json");
-    console.log(freeTime.toJson());
     pushRequest.send(freeTime.toJson());
 }
 

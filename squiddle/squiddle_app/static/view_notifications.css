@@ -29,7 +29,7 @@
 .notification {
     height: 10%;
     margin-bottom: 10px;
-    border-left: 1px dashed #333333;
+    border-left: 2px dashed #333333;
     font-family: "Open Sans";
     font-size: 13px;
     padding-left: 10px;
@@ -44,6 +44,29 @@
     pointer-events: none;
 }
 
+.notification .close-button {
+    padding-right: 10px;
+    margin-top: -28px;
+}
+
+.notification .close-button:hover {
+    color: red;
+}
+
+.notification .close-button:active {
+    color: #8b0000;
+}
+
+.notification .close-button {
+    color: #DDDDDD;
+}
+
+.notification .close-button:focus,
+.notification .close-button:active:focus {
+    outline: none;
+}
+
+
 .notification:hover {
     background: rgba(181, 205, 255, .2);
     border: none;
@@ -53,6 +76,7 @@
     background: rgba(181, 205, 255, .2);
     border: 1px solid blue;
 }
+
 
 /* Menu */
 
@@ -73,5 +97,9 @@
 #notification-menu {
     border-left: 1px solid #DDDDDD;
     height: 100%;
+}
+
+#notification-menu .hidden {
+    display: none;
 }
 

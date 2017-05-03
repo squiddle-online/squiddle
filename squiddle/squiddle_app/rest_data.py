@@ -159,18 +159,14 @@ class InvitationNotification(Notification):
 class InvitationDeclineNotification(Notification):
     def __init__(self, **kwargs):
         kwargs['type'] = models.Notification.Type.INVITATION_DECLINED
-        kwargs['data'] = {
-            'sender_name': kwargs['sender_name'],
-        }
+        kwargs['data'] = {}
         super().__init__(**kwargs)
 
 
 class InvitationAcceptNotification(Notification):
     def __init__(self, **kwargs):
         kwargs['type'] = models.Notification.Type.INVITATION_ACCEPTED
-        kwargs['data'] = {
-            'senderName': kwargs['sender_name'],
-        }
+        kwargs['data'] = {}
         super().__init__(**kwargs)
 
 

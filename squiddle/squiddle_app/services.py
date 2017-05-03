@@ -24,9 +24,18 @@ def notifications(request):
         notification_list = rest_data.NotificationList()
         notification_list.add(rest_data.InvitationNotification(sender='test sender', receiver='test receiver',
                                                                group_id=0, group_name='test group name'))
+        notification_list.add(rest_data.InvitationDeclineNotification(sender='test sender', receiver='test receiver',
+                                                                      group_id=0, group_name='test group name'))
+        notification_list.add(rest_data.InvitationAcceptNotification(sender='test sender', receiver='test receiver',
+                                                                     group_id=0, group_name='test group name'))
         return notification_list.to_json_response()
     else:
         return HttpResponse()
+
+
+@csrf_exempt
+def remove_notification(request):
+    return HttpResponse()
 
 
 @csrf_exempt
@@ -38,5 +47,6 @@ def users(request):
 url_patterns = [
     url(r'^free-time/$', free_time, name='free_time'),
     url(r'^notifications/$', notifications, name='notifications'),
+    url(r'^notifications/remove/$', remove_notification, name='remove_notification'),
     url(r'^users/$', users, name='users')
 ]

@@ -37,13 +37,13 @@ function pullNotifications() {
 }
 
 function populateNotifications() {
-    for (let n of jsonResult.notificationList) {
-        let element = makeNotificationElement(n);
+    for (let i = 0; i < jsonResult.notificationList.length; i++) {
+        let element = makeNotificationElement(jsonResult.notificationList[i], i);
         notificationListElement.appendChild(element);
     }
 }
 
-function makeNotificationElement(notification, removalInfo) {
+function makeNotificationElement(notification, index) {
 // Making one of these:
 //
 // <div class="notification">
@@ -82,15 +82,46 @@ function makeNotificationElement(notification, removalInfo) {
     type.setAttribute("style", "display: inline-block;");
     type.innerHTML = NotificationType.toString(notification.type);
 
+    let button = document.createElement("button");
+    button.setAttribute("class", "close close-button");
+    button.setAttribute("aria-label", "Close");
+    button.addEventListener("click", function() {
+        removeNotification(rootElement, index);
+    });
+
+    let span = document.createElement("span");
+    span.setAttribute("aria-hidden", "true");
+    span.setAttribute("style", "font-size: 55px;");
+    span.innerHTML = "&times;";
+
+    button.appendChild(span);
+
     rootElement.appendChild(senderLabel);
     rootElement.appendChild(sender);
     rootElement.appendChild(br);
     rootElement.appendChild(typeLabel);
     rootElement.appendChild(type);
+    rootElement.appendChild(button);
 
     return rootElement;
 }
 
 function selectNotification(notification) {
     console.log("selected notification");
+    if (selectedNotification)
+        selectedNotification.classList.remove("selected-notification");
+
+    selectedNotification = notification;
+    selectedNotification.classList.add("selected-notification");
 }
+
+function removeNotification(notification, index) {
+    var removalRequest = new XMLHttpRequest();
+    removalRequest.open("POST", "/services/notifications/remove/", true);
+    removalRequest.setRequestHeader("Content-type", "application/json");
+    removalRequest.send(JSON.stringify(jsonResult.notificationList[index]));
+    notification.parentNode.removeChild(notification);
+}
+
+
+
