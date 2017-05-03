@@ -26,6 +26,7 @@ ScheduleManager.prototype.type = function() {
 }
 
 ScheduleManager.prototype.addTimeBlock = function(day, start, end, groupNumber = -1) {
+    var initialStart = start[0];
     var scheduleTable = document.getElementById("table");
     var hourContainer = scheduleTable.getElementsByClassName("hour-container");
     if (groupNumber != -1 && this.type == ScheduleType.FREE_TIME)
@@ -34,21 +35,24 @@ ScheduleManager.prototype.addTimeBlock = function(day, start, end, groupNumber =
         throw "Tried to add a free time block to a group schedule.";
 
     if (this.type == ScheduleType.FREE_TIME) {
-        while (start < end) {
+        while (start[0] < end[0]) {
             var block = (start[0] * 7) + day;
             hourContainer[block].style.backgroundColor = GroupColorPallet[0];
-            start++;
+            start[0]++;
         }
     }
+    
+    // reset start value
+    start[0] = initialStart;
 };
 
 ScheduleManager.prototype.removeTimeBlock = function(day, start, end) {
     var scheduleTable = document.getElementById("table");
     var hourContainer = scheduleTable.getElementsByClassName("hour-container");
-    while (start < end) {
+    while (start[0] < end[0]) {
       var block = (start[0] * 7) + day;
       hourContainer[block].style.backgroundColor = "white";
-      start++;
+      start[0]++;
     }
 };
 
