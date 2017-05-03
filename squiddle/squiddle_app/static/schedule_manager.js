@@ -47,7 +47,7 @@ ScheduleManager.prototype.removeTimeBlock = function(day, start, end) {
     var hourContainer = scheduleTable.getElementsByClassName("hour-container");
     while (start < end) {
       var block = (start[0] * 7) + day;
-      hourContainer[block].style.backgroundColor = "#AFEFAF";
+      hourContainer[block].style.backgroundColor = "white";
       start++;
     }
 };
