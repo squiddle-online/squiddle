@@ -144,16 +144,14 @@ function showFreeTime() {
     scheduleManager.hide();
     scheduleManager.clamp(freeTime.getFirstHour(), freeTime.getLastHour());
 
-    // freeTime.days() is empty so this does nothing
-    for (const day of freeTime.days()) { 
+    console.log(freeTime.repr);
+    for (const day of freeTime.days()) {
+        console.log("here");
         for (const b of freeTime.blocks()[day]) {
+            console.log("here");
             scheduleManager.addTimeBlock(day, b[0], b[1]);
         }
     }
-
-    // testing addTimeBlock() and removeTimeBlock() 
-    scheduleManager.addTimeBlock(1, 10, 13);
-    scheduleManager.removeTimeBlock(1, 11, 13);
 
     scheduleManager.show();
 }
