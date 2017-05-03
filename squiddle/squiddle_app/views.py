@@ -5,7 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import *
-
+from .models import *
 
 def home(request):
     return redirect('view_schedules')
@@ -23,7 +23,20 @@ def edit_free_time(request):
 
 @login_required
 def create_group(request):
-    return render(request, 'create_group.html')
+    if request.method == 'POST':
+        group_form = GroupCreationForm(request.POST)
+        if group_form.is_valid():
+            name = group_form.clean_name()
+            description = group_form.clean_description()
+
+            new_group = MemberGroup(name=name, description=description, owner=request.user.member)
+            new_group.save()
+            return redirect('manage_groups')
+        else:
+            return render(request, 'create_group.html', context={'form': group_form})
+    else:
+        group_form = GroupCreationForm()
+        return render(request, 'create_group.html', context={'form': group_form})
 
 
 @login_required
