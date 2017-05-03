@@ -189,6 +189,7 @@ WeeklySchedule.prototype.addTimeBlock = function(day, block) {
 
     if (blocks_for_day.length == 0) {
         blocks_for_day.push([block.getStart(), block.getEnd()]);
+        if (!this.repr.days.includes(day)) this.repr.days.push(day);
         return true;
     }
 
@@ -208,11 +209,16 @@ WeeklySchedule.prototype.addTimeBlock = function(day, block) {
         else return 0; // equal as long as no overlapping block was inserted.
     });
 
+    if (!this.repr.days.includes(day)) this.repr.days.push(day);
+
     return true;
 };
 
 WeeklySchedule.prototype.removeTimeBlock = function(day, index) {
-    this.repr.blocks[day].splice(index, 1);
+    var blocks_for_day = this.repr.blocks[day];
+    blocks_for_day.splice(index, 1);
+    if (blocks_for_day.length == 0)
+        this.repr.days.splice(this.repr.days.indexOf(day), 1);
 };
 
 WeeklySchedule.prototype.assign = function(schedule) {
