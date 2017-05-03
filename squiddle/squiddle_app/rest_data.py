@@ -17,19 +17,37 @@ class Day(IntEnum):
 class WeeklySchedule:
     def __init__(self, json=None):
         if json:
+            # @Hack to undo the conversion to strings
             self.json = json
-            self.days = set()
+            blocks = self.json['blocks']
+            blocks[Day.MONDAY.value] = blocks['0']
+            blocks[Day.TUESDAY.value] = blocks['1']
+            blocks[Day.WEDNESDAY.value] = blocks['2']
+            blocks[Day.THURSDAY.value] = blocks['3']
+            blocks[Day.FRIDAY.value] = blocks['4']
+            blocks[Day.SATURDAY.value] = blocks['5']
+            blocks[Day.SUNDAY.value] = blocks['6']
+
+            del blocks['0']
+            del blocks['1']
+            del blocks['2']
+            del blocks['3']
+            del blocks['4']
+            del blocks['5']
+            del blocks['6']
+
+            self.days = set(json['days'])
             return
 
         self.json = dict(
             blocks={
-                Day.MONDAY: [],
-                Day.TUESDAY: [],
-                Day.WEDNESDAY: [],
-                Day.THURSDAY: [],
-                Day.FRIDAY: [],
-                Day.SATURDAY: [],
-                Day.SUNDAY: [],
+                Day.MONDAY.value : [],
+                Day.TUESDAY.value: [],
+                Day.WEDNESDAY.value: [],
+                Day.THURSDAY.value: [],
+                Day.FRIDAY.value: [],
+                Day.SATURDAY.value: [],
+                Day.SUNDAY.value: [],
             },
             days=[],
         )
@@ -73,7 +91,11 @@ class WeeklySchedule:
                     blocks_for_day.pop(i+1)
                 return False
 
-        self.days.add(day)
+        if isinstance(day, Day):
+            self.days.add(day.value)
+        else:
+            self.days.add(day)
+
         return True
 
     def to_json_response(self):
