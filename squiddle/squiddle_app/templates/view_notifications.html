@@ -1,8 +1,39 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block links%}
+<link rel="stylesheet" type="text/css" href="{% static "centered_container.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "view_notifications.css" %}">
 {% endblock%}
-{% block js%}
-{% endblock%}
+
 {% block asv%}
-<h1>Notification Display Stub</h1>
+<div class="centered-container">
+  <div id="main-row" class="row-fluid">
+    <div id="notification-list-container" class="col-xs-4">
+      <div id="notification-list-title-container">
+        <h1 id="notification-list-title">Inbox</h1>
+      </div>
+      <div id="notification-list">
+      </div>
+    </div>
+    <div id="notification-menu-container" class="col-xs-8">
+      <div id="notification-menu-title-container">
+        <h1 id="notification-menu-title">Options</h1>
+      </div>
+      <div id="notification-menu">
+        <div id="invitation-options" class="hidden">
+        </div>
+        <div id="invitation-accepted-message" class="hidden">
+        </div>
+        <div id="invitation-declined-message" class="hidden">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock%}
+
+{% block js%}
+<script type="text/JavaScript" src="{% static "view_notifications.js" %}"></script>
+{% endblock%}
+

@@ -14,8 +14,8 @@ class WeeklySchedule(models.Model):
         MEMBER_GROUP = 1
 
         CHOICES = (
-            (MEMBER, 'MEMBER'),
-            (MEMBER_GROUP, 'GROUP'),
+            (MEMBER, 'Member'),
+            (MEMBER_GROUP, 'Group'),
         )
 
     # Model Fields
@@ -54,7 +54,21 @@ class MemberGroup(models.Model):
 
 
 class Notification(models.Model):
-    pass
+    class Type:
+        INVITATION = 0
+        INVITATION_ACCEPTED = 1
+        INVITATION_DECLINED = 2
+
+        CHOICES = (
+            (INVITATION, 'Invitation'),
+            (INVITATION_ACCEPTED, 'Invitation Accepted'),
+            (INVITATION_DECLINED, 'Invitation Declined'),
+        )
+
+    sender = models.ForeignKey(Member, related_name='sender', on_delete=models.SET_NULL, null=True)
+    receiver = models.ForeignKey(Member, related_name='receiver', on_delete=models.CASCADE)
+    type = models.PositiveSmallIntegerField(choices=Type.CHOICES)
+    data = JSONField()
 
 
 # Signal Receivers
