@@ -37,6 +37,11 @@
 
 .notification .title {
     font-weight: bold;
+    pointer-events: none;
+}
+
+.notification .text {
+    pointer-events: none;
 }
 
 .notification:hover {

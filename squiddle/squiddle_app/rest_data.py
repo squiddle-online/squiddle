@@ -1,6 +1,7 @@
 from enum import IntEnum, unique
 from django.http import JsonResponse
 from squiddle_app import models
+import json
 
 
 @unique
@@ -130,9 +131,9 @@ class Notification:
     def get_receiver(self):
         return self.json['receiver']
 
-    def to_json_response(self):
+    def json_dict(self):
         assert Notification.__has_valid_json(self.json), 'JSON representation not complete.'
-        return JsonResponse(self.json, safe=False)
+        return self.json
 
     @classmethod
     def __has_valid_json(cls, json):
@@ -140,7 +141,7 @@ class Notification:
             if isinstance(v, dict):
                 if not Notification.__has_valid_json(v):
                     return False
-            if not v:
+            if v is None:
                 return False
         return True
 
@@ -149,8 +150,8 @@ class InvitationNotification(Notification):
     def __init__(self, **kwargs):
         kwargs['type'] = models.Notification.Type.INVITATION
         kwargs['data'] = {
-            'group_name': kwargs['group_name'],
-            'group_id': kwargs['group_id'],
+            'groupName': kwargs['group_name'],
+            'groupId': kwargs['group_id'],
         }
         super().__init__(**kwargs)
 
@@ -168,10 +169,21 @@ class InvitationAcceptNotification(Notification):
     def __init__(self, **kwargs):
         kwargs['type'] = models.Notification.Type.INVITATION_ACCEPTED
         kwargs['data'] = {
-            'sender_name': kwargs['sender_name'],
+            'senderName': kwargs['sender_name'],
         }
         super().__init__(**kwargs)
 
 
+class NotificationList:
+    def __init__(self):
+        self.json = {
+            'notificationList': []
+        }
 
+        self.list = self.json['notificationList']
 
+    def add(self, notification):
+        self.list.append(notification.json_dict())
+
+    def to_json_response(self):
+        return JsonResponse(self.json, safe=False)

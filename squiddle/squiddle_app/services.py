@@ -21,9 +21,12 @@ def free_time(request):
 @csrf_exempt
 def notifications(request):
     if request.method == 'GET':
-        return rest_data.InvitationNotification(sender='test sender', receiver='test receiver',
-                                                group_id=0, group_name='test group name').to_json_response()
-    return HttpResponse()
+        notification_list = rest_data.NotificationList()
+        notification_list.add(rest_data.InvitationNotification(sender='test sender', receiver='test receiver',
+                                                               group_id=0, group_name='test group name'))
+        return notification_list.to_json_response()
+    else:
+        return HttpResponse()
 
 
 @csrf_exempt
