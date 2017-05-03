@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block links%}
+<link rel="stylesheet" href="{% static 'form.css'%}">
+<link rel="stylesheet" href="{% static 'centered_form.css'%}">
+<link rel="stylesheet" href="{% static 'create_group.css'%}">
 {% endblock%}
-{% block js%}
-{% endblock%}
+
 {% block asv%}
-<h1>Worked</h1>
+<div id="container" class="col-xs-4 col-xs-offset-4">
+   <form method="post" class="form-horizontal">
+       {% include 'form.html' %}
+       <div id="button-group">
+          <button type="submit" class="btn btn-info">Create Group</button>
+       </div>
+   </form>
+</div>
 {% endblock%}
 
