@@ -19,7 +19,7 @@ def free_time(request):
 
 
 @csrf_exempt
-def notifications(request):
+def get_notifications(request):
     if request.method == 'GET':
         notification_list = rest_data.NotificationList()
         notification_list.add(rest_data.InvitationNotification(sender='test sender', receiver='test receiver',
@@ -29,12 +29,21 @@ def notifications(request):
         notification_list.add(rest_data.InvitationAcceptNotification(sender='test sender', receiver='test receiver',
                                                                      group_id=0, group_name='test group name'))
         return notification_list.to_json_response()
-    else:
-        return HttpResponse()
+
+    return HttpResponse()
 
 
 @csrf_exempt
-def remove_notification(request):
+def add_notification(request):
+    if request.method == 'POST':
+        return HttpResponse()
+
+    return HttpResponse()
+
+
+@csrf_exempt
+def remove_notification(request, index):
+    print(index)
     return HttpResponse()
 
 
@@ -46,7 +55,10 @@ def users(request):
 
 url_patterns = [
     url(r'^free-time/$', free_time, name='free_time'),
-    url(r'^notifications/$', notifications, name='notifications'),
-    url(r'^notifications/remove/$', remove_notification, name='remove_notification'),
+    url(r'^notifications/get/$', get_notifications, name='get_notifications'),
+    url(r'^notifications/add/$', remove_notification, name='add_notification'),
+    url(r'^notifications/remove/(\d+)$', remove_notification, name='remove_notification'),
+    url(r'^notifications/accept-invitation/$', remove_notification, name='accept_invitation'),
+    url(r'^notifications/decline-invitation/$', remove_notification, name='decline_invitation'),
     url(r'^users/$', users, name='users')
 ]
