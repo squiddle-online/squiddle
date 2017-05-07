@@ -1,13 +1,13 @@
 const NotificationType = {
     INVITATION: 0,
-    INVITATION_ACCEPT: 1,
-    INVITATION_DECLINE: 2,
+    INVITATION_ACCEPTED: 1,
+    INVITATION_INVITATION_DECLINED: 2,
 
     toString: function(type) {
         switch(type) {
         case this.INVITATION: return "Group Invitation";
-        case this.INVITATION_ACCEPT: return "Invitation Accept";
-        case this.INVITATION_DECLINE: return "Invitation Decline";
+        case this.INVITATION_ACCEPTED: return "Invitation Accepted";
+        case this.INVITATION_INVITATION_DECLINED: return "Invitation Declined";
         default: return "Unknown";
         }
     }
@@ -31,6 +31,7 @@ function pullNotifications() {
 
     notificationRequest.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
             jsonResult = JSON.parse(this.responseText);
             populateNotifications();
         }
@@ -75,7 +76,7 @@ function makeNotificationElement(notification, index) {
     let sender = document.createElement("p");
     sender.setAttribute("style", "display: inline-block;");
     sender.setAttribute("class", "text");
-    sender.innerHTML = ("User <i>" + notification.sender + "</i>");
+    sender.innerHTML = ("User <i>" + notification.sender_name + "</i>");
 
     let br = document.createElement("br");
 
@@ -128,9 +129,9 @@ function selectNotification(notificationElement, notification) {
 
 function removeNotification(notification, index) {
     var removalRequest = new XMLHttpRequest();
-    removalRequest.open("POST", "/services/notifications/remove/" + index, true);
+    removalRequest.open("POST", "/services/notifications/remove/" + jsonResult.notificationList[index].id, true);
     removalRequest.setRequestHeader("Content-type", "application/json");
-    removalRequest.send(JSON.stringify(jsonResult.notificationList[index]));
+    removalRequest.send();
     jsonResult.notificationList.splice(index, 1);
     if (notification == selectedNotificationElement)
         hideOptions();
@@ -182,14 +183,25 @@ function showNotificationOptions(notification) {
     switch (notification.type) {
     case NotificationType.INVITATION:
         optionElement = document.getElementById("invitation-options");
+
+        document.getElementById("invitation-options-message").innerHTML =
+                                "<i>" + selectedNotification.sender_name +"</i>" +
+                                " Has Invited You to Join <i>" + selectedNotification.group_name + "</i>";
+
         optionElement.classList.remove("hidden");
         break;
-    case NotificationType.INVITATION_ACCEPT:
+    case NotificationType.INVITATION_ACCEPTED:
         optionElement = document.getElementById("invitation-accepted-message");
+
+        document.getElementById("invitation-accepted-message-text").innerHTML = "Test Accept";
+
         optionElement.classList.remove("hidden");
         break;
-    case NotificationType.INVITATION_DECLINE:
+    case NotificationType.INVITATION_INVITATION_DECLINED:
         optionElement = document.getElementById("invitation-declined-message");
+
+        document.getElementById("invitation-declined-message-text").innerHTML = "Test Decline";
+
         optionElement.classList.remove("hidden");
         break;
     default: break;

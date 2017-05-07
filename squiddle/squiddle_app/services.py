@@ -1,8 +1,10 @@
 from django.conf.urls import url
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.http import HttpResponseBadRequest
 from squiddle_app import rest_data
 from squiddle_app import models
+from django.core.exceptions import *
 import json
 
 
@@ -22,15 +24,11 @@ def free_time(request):
 def get_notifications(request):
     if request.method == 'GET':
         notification_list = rest_data.NotificationList()
-        notification_list.add(rest_data.InvitationNotification(sender='test sender', receiver='test receiver',
-                                                               group_id=0, group_name='test group name'))
-        notification_list.add(rest_data.InvitationDeclineNotification(sender='test sender', receiver='test receiver',
-                                                                      group_id=0, group_name='test group name'))
-        notification_list.add(rest_data.InvitationAcceptNotification(sender='test sender', receiver='test receiver',
-                                                                     group_id=0, group_name='test group name'))
+        for n in models.Notification.objects.filter(receiver=request.user.member):
+            notification_list.add(n.to_rest_data())
         return notification_list.to_json_response()
 
-    return HttpResponse()
+    return HttpResponseBadRequest()
 
 
 @csrf_exempt
@@ -42,9 +40,26 @@ def add_notification(request):
 
 
 @csrf_exempt
-def remove_notification(request, index):
-    print(index)
+def remove_notification(request, pk):
+    if request.method == 'GET':
+        return HttpResponseBadRequest()
+
+    try:
+        models.Notification.objects.get(pk=pk, receiver=request.user.member).delete()
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest("Notification either does not exits or doesn't belong to the current user.")
+
     return HttpResponse()
+
+
+@csrf_exempt
+def accept_invitation(request, pk):
+    print('Accepting invitation: ', pk)
+
+
+@csrf_exempt
+def decline_invitation(request, pk):
+    print('Declining invitation: ', pk)
 
 
 @csrf_exempt
@@ -58,7 +73,7 @@ url_patterns = [
     url(r'^notifications/get/$', get_notifications, name='get_notifications'),
     url(r'^notifications/add/$', remove_notification, name='add_notification'),
     url(r'^notifications/remove/(\d+)$', remove_notification, name='remove_notification'),
-    url(r'^notifications/accept-invitation/$', remove_notification, name='accept_invitation'),
-    url(r'^notifications/decline-invitation/$', remove_notification, name='decline_invitation'),
+    url(r'^notifications/accept-invitation/(\d+)$', remove_notification, name='accept_invitation'),
+    url(r'^notifications/decline-invitation/(\d+)$', remove_notification, name='decline_invitation'),
     url(r'^users/$', users, name='users')
 ]

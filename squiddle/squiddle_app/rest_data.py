@@ -1,7 +1,6 @@
 from enum import IntEnum, unique
 from django.http import JsonResponse
 from squiddle_app import models
-import json
 
 
 @unique
@@ -108,36 +107,50 @@ class Notification:
     def __init__(self, **kwargs):
         self.json = {
             'type': kwargs['type'],
-            'sender': kwargs['sender'],
-            'receiver': kwargs['receiver'],
+            'id': kwargs['id'],
+            'sender_id': kwargs['sender_id'],
+            'sender_name': kwargs['sender_name'],
+            'receiver_name': kwargs['receiver_name'],
+            'receiver_id': kwargs['receiver_id'],
             'data': kwargs['data']
         }
 
-    def set_message(self, message):
-        self.json['message'] = message
+    def set_sender_name(self, sender_name):
+        self.json['sender_name'] = sender_name
 
-    def get_message(self):
-        return self.json['message']
+    def set_sender_id(self, sender_id):
+        self.json['sender_id'] = sender_id
 
-    def set_sender(self, sender):
-        self.json['sender'] = sender
+    def get_sender_name(self):
+        return self.json['sender_name']
 
-    def get_sender(self):
-        return self.json['sender']
+    def get_sender_id(self):
+        return self.json['sender_id']
 
-    def set_receiver(self, receiver):
-        self.json['receiver'] = receiver
+    def set_receiver_name(self, receiver_name):
+        self.json['receiver_name'] = receiver_name
 
-    def get_receiver(self):
-        return self.json['receiver']
+    def set_receiver_id(self, receiver_id):
+        self.json['receiver_id'] = receiver_id
+
+    def get_receiver_name(self):
+        return self.json['receiver_name']
+
+    def get_receiver_id(self):
+        return self.json['receiver_id']
 
     def json_dict(self):
         assert Notification.__has_valid_json(self.json), 'JSON representation not complete.'
         return self.json
 
+    def to_model(self):
+        assert Notification.__has_valid_json(self.json), 'JSON representation not complete.'
+        return models.Notification(sender=self.json['sender_id'], receiver=self.json['receiver_id'],
+                                   type=self.json['type'], data=self.json['data'])
+
     @classmethod
-    def __has_valid_json(cls, json):
-        for v in json.values():
+    def __has_valid_json(cls, json_dict):
+        for v in json_dict.values():
             if isinstance(v, dict):
                 if not Notification.__has_valid_json(v):
                     return False
