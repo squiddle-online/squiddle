@@ -1,24 +1,28 @@
 const NotificationType = {
     INVITATION: 0,
-    INVITATION_ACCEPT: 1,
-    INVITATION_DECLINE: 2,
+    INVITATION_ACCEPTED: 1,
+    INVITATION_INVITATION_DECLINED: 2,
 
     toString: function(type) {
         switch(type) {
         case this.INVITATION: return "Group Invitation";
-        case this.INVITATION_ACCEPT: return "Invitation Accept";
-        case this.INVITATION_DECLINE: return "Invitation Decline";
+        case this.INVITATION_ACCEPTED: return "Invitation Accepted";
+        case this.INVITATION_INVITATION_DECLINED: return "Invitation Declined";
         default: return "Unknown";
         }
     }
 };
 
 var jsonResult = null;
+var selectedNotificationElement = null;
 var selectedNotification = null;
 var notificationListElement = null;
 
 window.addEventListener("load", function() {
     notificationListElement = document.getElementById("notification-list");
+    document.getElementById("invitation-accept-button").addEventListener("click", acceptInvitation);
+    document.getElementById("invitation-decline-button").addEventListener("click", declineInvitation);
+
     pullNotifications();
 });
 
@@ -32,15 +36,18 @@ function pullNotifications() {
         }
     }
 
-    notificationRequest.open("GET", "/services/notifications/", true);
+    notificationRequest.open("GET", "/services/notifications/get/", true);
     notificationRequest.send();
 }
 
 function populateNotifications() {
-    for (let i = 0; i < jsonResult.notificationList.length; i++) {
+    let numNotification = jsonResult.notificationList.length;
+    for (let i = 0; i < numNotification; i++) {
         let element = makeNotificationElement(jsonResult.notificationList[i], i);
         notificationListElement.appendChild(element);
     }
+
+    selectNextNotification();
 }
 
 function makeNotificationElement(notification, index) {
@@ -57,7 +64,7 @@ function makeNotificationElement(notification, index) {
     let rootElement = document.createElement("div");
     rootElement.setAttribute("class", "notification");
     rootElement.onclick = function() {
-        selectNotification(this);
+        selectNotification(this, notification);
     };
 
     let senderLabel = document.createElement("p");
@@ -68,7 +75,7 @@ function makeNotificationElement(notification, index) {
     let sender = document.createElement("p");
     sender.setAttribute("style", "display: inline-block;");
     sender.setAttribute("class", "text");
-    sender.innerHTML = ("User <i>" + notification.sender + "</i>");
+    sender.innerHTML = ("User <i>" + notification.sender_name + "</i>");
 
     let br = document.createElement("br");
 
@@ -85,8 +92,9 @@ function makeNotificationElement(notification, index) {
     let button = document.createElement("button");
     button.setAttribute("class", "close close-button");
     button.setAttribute("aria-label", "Close");
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function(event) {
         removeNotification(rootElement, index);
+        event.stopPropagation();
     });
 
     let span = document.createElement("span");
@@ -106,22 +114,107 @@ function makeNotificationElement(notification, index) {
     return rootElement;
 }
 
-function selectNotification(notification) {
-    console.log("selected notification");
-    if (selectedNotification)
-        selectedNotification.classList.remove("selected-notification");
+function selectNotification(notificationElement, notification) {
+    if (selectedNotificationElement)
+        selectedNotificationElement.classList.remove("selected-notification");
+
+    selectedNotificationElement = notificationElement;
+    selectedNotificationElement.classList.add("selected-notification");
 
     selectedNotification = notification;
-    selectedNotification.classList.add("selected-notification");
+
+    showNotificationOptions(notification);
 }
 
 function removeNotification(notification, index) {
     var removalRequest = new XMLHttpRequest();
-    removalRequest.open("POST", "/services/notifications/remove/", true);
-    removalRequest.setRequestHeader("Content-type", "application/json");
-    removalRequest.send(JSON.stringify(jsonResult.notificationList[index]));
+    removalRequest.open("POST", "/services/notifications/remove/" + jsonResult.notificationList[index].id, true);
+    removalRequest.send();
+    jsonResult.notificationList.splice(index, 1);
+    if (notification == selectedNotificationElement)
+        hideOptions();
+
     notification.parentNode.removeChild(notification);
 }
 
+function acceptInvitation() {
+    this.blur();
+    if (!selectedNotification || selectedNotification.type != NotificationType.INVITATION)
+        throw "acceptInvitation() called on invalid notification.";
 
+    var request = new XMLHttpRequest();
+    request.open("POST", "/services/notifications/accept-invitation/" + selectedNotification.id, true);
+    request.send();
+
+    removeNotification(selectedNotificationElement, notificationIndex(selectedNotificationElement));
+    hideOptions();
+    selectNextNotification()
+}
+
+function declineInvitation() {
+    this.blur();
+    if (!selectedNotification || selectedNotification.type != NotificationType.INVITATION)
+        throw "declineInvitation() called on invalid notification.";
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "/services/notifications/decline-invitation/" + selectedNotification.id, true);
+    request.send();
+
+    removeNotification(selectedNotificationElement, notificationIndex(selectedNotificationElement));
+    hideOptions();
+    selectNextNotification()
+}
+
+function notificationIndex(element) {
+    var node = element;
+    for (var i = 0; (node = node.previousElementSibling); i++);
+    return i;
+}
+
+function hideOptions() {
+    for (let elem of document.getElementById("notification-menu").children)
+        elem.classList.add("hidden");
+}
+
+function selectNextNotification() {
+    if (jsonResult.notificationList.length) {
+        selectNotification(notificationListElement.firstElementChild, jsonResult.notificationList[0]);
+    }
+}
+
+function showNotificationOptions(notification) {
+    hideOptions();
+    // Make them all hidden by default, then make the one we need visible.
+    var optionElement = null;
+    switch (notification.type) {
+    case NotificationType.INVITATION:
+        optionElement = document.getElementById("invitation-options");
+
+        document.getElementById("invitation-options-message").innerHTML =
+                                "<i>" + selectedNotification.senderName +"</i>" +
+                                " has invited you to join <i>" + selectedNotification.data.groupName + "</i>";
+
+        optionElement.classList.remove("hidden");
+        break;
+    case NotificationType.INVITATION_ACCEPTED:
+        optionElement = document.getElementById("invitation-accepted-message");
+
+        document.getElementById("invitation-accepted-message-text").innerHTML =
+                                "<i>" + selectedNotification.senderName + "</i>" +
+                                " has accepted your group invitation.";
+
+        optionElement.classList.remove("hidden");
+        break;
+    case NotificationType.INVITATION_INVITATION_DECLINED:
+        optionElement = document.getElementById("invitation-declined-message");
+
+        document.getElementById("invitation-declined-message-text").innerHTML =
+                                "<i>" + selectedNotification.senderName + "</i>" +
+                                " has accepted your group invitation.";
+
+        optionElement.classList.remove("hidden");
+        break;
+    default: break;
+    }
+}
 
