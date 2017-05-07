@@ -16,16 +16,24 @@
       <div id="notification-list">
       </div>
     </div>
-    <div id="notification-menu-container" class="col-xs-8">
+    <div id="notification-menu-container" class="col-xs-6">
       <div id="notification-menu-title-container">
-        <h1 id="notification-menu-title">Options</h1>
+        <h1 id="notification-menu-title">Summary</h1>
       </div>
       <div id="notification-menu">
         <div id="invitation-options" class="hidden">
+          <h1 id="invitation-options-message"></h1>
+          <div id="invitation-option-button-group" class="row-fluid">
+            <span id="invitation-button-message"></span>
+            <button id="invitation-accept-button" class="btn btn-success pull-left">Accept</button>
+            <button id="invitation-decline-button" class="btn btn-danger pull-left">Decline</button>
+          </div>
         </div>
         <div id="invitation-accepted-message" class="hidden">
+          <h1 id="invitation-accepted-message-text"></h1>
         </div>
         <div id="invitation-declined-message" class="hidden">
+          <h1 id="invitation-declined-message-text"></h1>
         </div>
       </div>
     </div>
