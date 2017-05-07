@@ -108,10 +108,10 @@ class Notification:
         self.json = {
             'type': kwargs['type'],
             'id': kwargs['id'],
-            'sender_id': kwargs['sender_id'],
-            'sender_name': kwargs['sender_name'],
-            'receiver_name': kwargs['receiver_name'],
-            'receiver_id': kwargs['receiver_id'],
+            'senderId': kwargs['sender_id'],
+            'senderName': kwargs['sender_name'],
+            'receiverName': kwargs['receiver_name'],
+            'receiverId': kwargs['receiver_id'],
             'data': kwargs['data']
         }
 

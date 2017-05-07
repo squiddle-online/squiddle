@@ -47,19 +47,52 @@ def remove_notification(request, pk):
     try:
         models.Notification.objects.get(pk=pk, receiver=request.user.member).delete()
     except ObjectDoesNotExist:
-        return HttpResponseBadRequest("Notification either does not exits or doesn't belong to the current user.")
+        return HttpResponseBadRequest("Notification either does not exist or doesn't belong to the current user.")
 
     return HttpResponse()
 
 
 @csrf_exempt
 def accept_invitation(request, pk):
-    print('Accepting invitation: ', pk)
+    if request.method == 'GET':
+        return HttpResponseBadRequest()
+
+    member = request.user.member
+    try:
+        notification = models.Notification.objects.get(pk=pk, type=models.Notification.Type.INVITATION,
+                                                       receiver=member)
+        group = models.MemberGroup.objects.get(pk=notification.data['group_id'])
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest('Invitation does not exist or is not the correct type.')
+
+    # Make sure not to add members twice.
+    if group.members.filter(pk=member.pk):
+        return HttpResponse()
+
+    group.members.add(member)
+    confirmation = models.Notification.create_invitation_accepted(sender=member, receiver=group.owner)
+    confirmation.save()
+
+    return HttpResponse()
 
 
 @csrf_exempt
 def decline_invitation(request, pk):
-    print('Declining invitation: ', pk)
+    if request.method == 'GET':
+        return HttpResponseBadRequest()
+
+    member = request.user.member
+    try:
+        notification = models.Notification.objects.get(pk=pk, type=models.Notification.Type.INVITATION,
+                                                       receiver=member)
+        group = models.MemberGroup.objects.get(pk=notification.data['group_id'])
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest()
+
+    notice = models.Notification.create_invitation_declined(sender=member, receiver=group.owner)
+    notice.save()
+
+    return HttpResponse()
 
 
 @csrf_exempt
@@ -73,7 +106,7 @@ url_patterns = [
     url(r'^notifications/get/$', get_notifications, name='get_notifications'),
     url(r'^notifications/add/$', remove_notification, name='add_notification'),
     url(r'^notifications/remove/(\d+)$', remove_notification, name='remove_notification'),
-    url(r'^notifications/accept-invitation/(\d+)$', remove_notification, name='accept_invitation'),
-    url(r'^notifications/decline-invitation/(\d+)$', remove_notification, name='decline_invitation'),
+    url(r'^notifications/accept-invitation/(\d+)$', accept_invitation, name='accept_invitation'),
+    url(r'^notifications/decline-invitation/(\d+)$', decline_invitation, name='decline_invitation'),
     url(r'^users/$', users, name='users')
 ]

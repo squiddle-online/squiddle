@@ -35,7 +35,7 @@ class WeeklySchedule(models.Model):
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     timezone = TimeZoneField()
-    groups = models.ManyToManyField('MemberGroup', blank=True)
+    groups = models.ManyToManyField('MemberGroup', related_name='members',blank=True)
     # Not really nullable and will be handled through receivers
     free_time = models.ForeignKey(WeeklySchedule, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -85,9 +85,9 @@ class Notification(models.Model):
                             data={})
 
     @classmethod
-    def create_invitation_accepted(cls, sender, receiver):
+    def create_invitation_declined(cls, sender, receiver):
         return Notification(sender=sender, receiver=receiver,
-                            type=Notification.Type.INVITATION_ACCEPTED,
+                            type=Notification.Type.INVITATION_DECLINED,
                             data={})
 
     def to_rest_data(self):

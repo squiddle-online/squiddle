@@ -31,7 +31,6 @@ function pullNotifications() {
 
     notificationRequest.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
             jsonResult = JSON.parse(this.responseText);
             populateNotifications();
         }
@@ -130,7 +129,6 @@ function selectNotification(notificationElement, notification) {
 function removeNotification(notification, index) {
     var removalRequest = new XMLHttpRequest();
     removalRequest.open("POST", "/services/notifications/remove/" + jsonResult.notificationList[index].id, true);
-    removalRequest.setRequestHeader("Content-type", "application/json");
     removalRequest.send();
     jsonResult.notificationList.splice(index, 1);
     if (notification == selectedNotificationElement)
@@ -144,6 +142,10 @@ function acceptInvitation() {
     if (!selectedNotification || selectedNotification.type != NotificationType.INVITATION)
         throw "acceptInvitation() called on invalid notification.";
 
+    var request = new XMLHttpRequest();
+    request.open("POST", "/services/notifications/accept-invitation/" + selectedNotification.id, true);
+    request.send();
+
     removeNotification(selectedNotificationElement, notificationIndex(selectedNotificationElement));
     hideOptions();
     selectNextNotification()
@@ -153,6 +155,10 @@ function declineInvitation() {
     this.blur();
     if (!selectedNotification || selectedNotification.type != NotificationType.INVITATION)
         throw "declineInvitation() called on invalid notification.";
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "/services/notifications/decline-invitation/" + selectedNotification.id, true);
+    request.send();
 
     removeNotification(selectedNotificationElement, notificationIndex(selectedNotificationElement));
     hideOptions();
@@ -185,22 +191,26 @@ function showNotificationOptions(notification) {
         optionElement = document.getElementById("invitation-options");
 
         document.getElementById("invitation-options-message").innerHTML =
-                                "<i>" + selectedNotification.sender_name +"</i>" +
-                                " Has Invited You to Join <i>" + selectedNotification.group_name + "</i>";
+                                "<i>" + selectedNotification.senderName +"</i>" +
+                                " has invited you to join <i>" + selectedNotification.data.groupName + "</i>";
 
         optionElement.classList.remove("hidden");
         break;
     case NotificationType.INVITATION_ACCEPTED:
         optionElement = document.getElementById("invitation-accepted-message");
 
-        document.getElementById("invitation-accepted-message-text").innerHTML = "Test Accept";
+        document.getElementById("invitation-accepted-message-text").innerHTML =
+                                "<i>" + selectedNotification.senderName + "</i>" +
+                                " has accepted your group invitation.";
 
         optionElement.classList.remove("hidden");
         break;
     case NotificationType.INVITATION_INVITATION_DECLINED:
         optionElement = document.getElementById("invitation-declined-message");
 
-        document.getElementById("invitation-declined-message-text").innerHTML = "Test Decline";
+        document.getElementById("invitation-declined-message-text").innerHTML =
+                                "<i>" + selectedNotification.senderName + "</i>" +
+                                " has accepted your group invitation.";
 
         optionElement.classList.remove("hidden");
         break;
