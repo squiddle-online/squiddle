@@ -11,39 +11,49 @@ const ScheduleType = {
 };
 
 const GroupColorPallet = [
-    // TODO: add rgb values or whatever you need here.
+    "lightblue", "orange", "blue", "red"
 ];
 
 var ScheduleManager = function(type) {
-    // TODO: grab the schedule table by id and setup anything else.
-
+    var scheduleTable = document.getElementById("table");
+    var hourContainer = scheduleTable.getElementsByClassName("hour-container");
     this.type = type;
-
-    // TODO: the table needs to be invisible by default, so the user doesn't
-    // see anything until their schedule is populated.
     this.visible = false;
 };
 
 ScheduleManager.prototype.type = function() {
     return this.type;
-};
+}
 
 ScheduleManager.prototype.addTimeBlock = function(day, start, end, groupNumber = -1) {
+    var initialStart = start[0];
+    var scheduleTable = document.getElementById("table");
+    var hourContainer = scheduleTable.getElementsByClassName("hour-container");
     if (groupNumber != -1 && this.type == ScheduleType.FREE_TIME)
         throw "Tried to add a group time block to a free time schedule.";
     else if (!groupNumber && this.type == ScheduleType.GROUP)
         throw "Tried to add a free time block to a group schedule.";
 
     if (this.type == ScheduleType.FREE_TIME) {
-        // TODO: Quick and easy; add a free time styled block.
-        return;
+        while (start[0] < end[0]) {
+            var block = (start[0] * 7) + day;
+            hourContainer[block].style.backgroundColor = GroupColorPallet[0];
+            start[0]++;
+        }
     }
-
-    // TODO: Add a group block using groupNumber to lookup colors in the GroupColorPallet or whatever works.
+    
+    // reset start value
+    start[0] = initialStart;
 };
 
 ScheduleManager.prototype.removeTimeBlock = function(day, start, end) {
-    // TODO:
+    var scheduleTable = document.getElementById("table");
+    var hourContainer = scheduleTable.getElementsByClassName("hour-container");
+    while (start[0] < end[0]) {
+      var block = (start[0] * 7) + day;
+      hourContainer[block].style.backgroundColor = "white";
+      start[0]++;
+    }
 };
 
 ScheduleManager.prototype.clamp = function(minHour, maxHour) {
