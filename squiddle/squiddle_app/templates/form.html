@@ -29,10 +29,9 @@
                 {% endfor %}
             </select>
         {% elif field.field.widget|widget_type == 'Textarea' %}
-            <textarea class="form-control" id="{{ field.id_for_label}}" type="{{ field|field_type}} name="{{ field.name }}">
-            </textarea>
+            <textarea class="form-control" id="{{field.id_for_label}}" name="{{field.name}}"></textarea>
         {% else %}
-            <input class="form-control" id="{{ field.id_for_label}}" type="{{ field|field_type}}" name="{{ field.name }}">
+            <input class="form-control" id="{{field.id_for_label}}" type="{{ field|field_type}}" name="{{field.name}}">
         {% endif %}
         {% if field.help_text %}
             <p class="helptext">{{ field.help_text|safe }}</p>

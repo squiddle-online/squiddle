@@ -103,6 +103,16 @@ class WeeklySchedule:
         return JsonResponse(self.json, safe=False)
 
 
+def is_valid_json_dict(json_dict):
+    for v in json_dict.values():
+        if isinstance(v, dict):
+            if not is_valid_json_dict(v):
+                return False
+        if v is None:
+            return False
+    return True
+
+
 class Notification:
     def __init__(self, **kwargs):
         self.json = {
@@ -140,23 +150,13 @@ class Notification:
         return self.json['receiver_id']
 
     def json_dict(self):
-        assert Notification.__has_valid_json(self.json), 'JSON representation not complete.'
+        assert is_valid_json_dict(self.json), 'JSON representation not complete.'
         return self.json
 
     def to_model(self):
-        assert Notification.__has_valid_json(self.json), 'JSON representation not complete.'
+        assert is_valid_json_dict(self.json), 'JSON representation not complete.'
         return models.Notification(sender=self.json['sender_id'], receiver=self.json['receiver_id'],
                                    type=self.json['type'], data=self.json['data'])
-
-    @classmethod
-    def __has_valid_json(cls, json_dict):
-        for v in json_dict.values():
-            if isinstance(v, dict):
-                if not Notification.__has_valid_json(v):
-                    return False
-            if v is None:
-                return False
-        return True
 
 
 class InvitationNotification(Notification):
@@ -193,6 +193,64 @@ class NotificationList:
 
     def add(self, notification):
         self.list.append(notification.json_dict())
+
+    def to_json_response(self):
+        return JsonResponse(self.json, safe=False)
+
+
+class Group:
+    def __init__(self, **kwargs):
+        self.json = {
+            'name': kwargs['name'],
+            'id': kwargs['id'],
+            'owner': kwargs['owner'],
+        }
+
+    def get_name(self):
+        return self.json['name']
+
+    def set_name(self, name):
+        self.json['name'] = name
+
+    def get_id(self):
+        return self.json['id']
+
+    def set_id(self, id):
+        self.json['id'] = id
+
+    def get_owner(self):
+        return self.json['owner']
+
+    def set_owner(self, owner):
+        self.json['owner'] = owner
+
+    def json_dict(self):
+        assert is_valid_json_dict(self.json), 'JSON representation is incomplete'
+        return self.json
+
+    def to_model(self):
+        assert is_valid_json_dict(self.json), 'JSON representation is incomplete'
+        return models.MemberGroup.objects.get(pk=self.json['id'], name=self.json['name'],
+                                              owner=models.User.objects.get(username=self.json['owner']).member)
+
+
+class GroupList:
+    def __init__(self):
+        self.json = {
+            'groups': {
+                'ownerOf': [],
+                'memberOf': [],
+            }
+        }
+
+        self.owner_of = self.json['groups']['ownerOf']
+        self.member_of = self.json['groupList']['memberOf']
+
+    def add_owner_of(self, group):
+        self.owner_of.append(group.json_dict())
+
+    def add_member_of(self, group):
+        self.member_of.append(group.json_dict())
 
     def to_json_response(self):
         return JsonResponse(self.json, safe=False)
