@@ -139,6 +139,30 @@ def groups(request):
 
 
 @csrf_exempt
+def edit_group(request):
+    if request.method == 'POST':
+        return HttpResponseBadRequest()
+
+    try:
+        json_dict = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest()
+
+    try:
+        name = json_dict['name']
+        description = json_dict['description']
+    except KeyError:
+        return HttpResponseBadRequest()
+
+    g = models.MemberGroup.objects.get(name=name)
+    if g.owner != request.user.member:
+        return HttpResponseBadRequest()
+
+    g.name = name
+    g.description = description
+
+
+@csrf_exempt
 def users(request):
     if request.method == 'GET':
         return HttpResponse()
@@ -151,7 +175,8 @@ url_patterns = [
     url(r'^notifications/remove/(\d+)$', remove_notification, name='remove_notification'),
     url(r'^notifications/accept-invitation/(\d+)$', accept_invitation, name='accept_invitation'),
     url(r'^notifications/decline-invitation/(\d+)$', decline_invitation, name='decline_invitation'),
-    url(r'^groups/schedules/$', group_schedules, name='groups'),
+    url(r'^groups/schedules/$', group_schedules, name='groups_schedules'),
+    url(r'^groups/edit/$', edit_group, name='groups_edit'),
     url(r'^groups/$', groups, name='groups'),
     url(r'^users/$', users, name='users')
 ]

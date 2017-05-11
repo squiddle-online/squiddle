@@ -31,6 +31,12 @@
       </div>
       <div id="group-options">
         <div id="member-options" class="hidden">
+          <div class="row-fluid">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-8">
+              <button id="leave-group-button" class="btn btn-danger">Leave Group</button>
+            </div>
+          </div>
         </div>
         <div id="owner-options" class="hidden">
           <form id="member-search-form" class="search-form">
@@ -49,9 +55,10 @@
             {% include 'form.html' with form=group_edit_form %}
             <div id="edit-group-button-container">
               <button id="save-group-edits-button" class="btn btn-success">Save</button>
-              <button id="cancel-group-edits-button" class="btn btn-danger">Cancel</button>
+              <button id="cancel-group-edits-button" class="btn btn-default">Cancel</button>
             </div>
           </form>
+          <button id="disband-group-button" class="btn btn-danger">Disband</button>
         </div>
       </div>
     </div>
