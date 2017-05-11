@@ -41,6 +41,7 @@
 
 #group-options {
     height: 100%;
+    margin-top: 50px;
 }
 
 .col-title-container {
@@ -75,3 +76,22 @@
     font-weight: bold;
 }
 
+
+/* Owned group options */
+
+#edit-group-button-container {
+    margin-top: 50px;
+}
+
+#save-group-edits-button,
+#cancel-group-edits-button {
+    height: 40px;
+}
+
+#member-search-form .search-form {
+    width: 100%;
+}
+
+#member-search-form {
+    margin-bottom: 100px;
+}

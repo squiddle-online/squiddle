@@ -198,13 +198,33 @@ class NotificationList:
         return JsonResponse(self.json, safe=False)
 
 
+class Member:
+    def __init__(self, **kwargs):
+        self.json = {
+            'name': kwargs['name'],
+            'id': kwargs['id'],
+            'tz': kwargs['tz'],
+        }
+
+    def json_dict(self):
+        assert is_valid_json_dict(self.json), 'JSON representation incomplete.'
+        return self.json
+
+    def to_model(self):
+        assert is_valid_json_dict(self.json), 'JSON representation incomplete.'
+        return models.User.objects.get(username=self.json['name']).member
+
+
 class Group:
     def __init__(self, **kwargs):
         self.json = {
             'name': kwargs['name'],
             'id': kwargs['id'],
             'owner': kwargs['owner'],
+            'members': kwargs['members'],
         }
+
+        self.members = self.json['members']
 
     def get_name(self):
         return self.json['name']
@@ -215,14 +235,20 @@ class Group:
     def get_id(self):
         return self.json['id']
 
-    def set_id(self, id):
-        self.json['id'] = id
+    def set_id(self, pk):
+        self.json['id'] = pk
 
     def get_owner(self):
         return self.json['owner']
 
     def set_owner(self, owner):
         self.json['owner'] = owner
+
+    def get_members(self):
+        return self.members
+
+    def add_member(self, member):
+        self.members.append(member.json_dict())
 
     def json_dict(self):
         assert is_valid_json_dict(self.json), 'JSON representation is incomplete'
@@ -244,7 +270,7 @@ class GroupList:
         }
 
         self.owner_of = self.json['groups']['ownerOf']
-        self.member_of = self.json['groupList']['memberOf']
+        self.member_of = self.json['groups']['memberOf']
 
     def add_owner_of(self, group):
         self.owner_of.append(group.json_dict())
@@ -254,3 +280,21 @@ class GroupList:
 
     def to_json_response(self):
         return JsonResponse(self.json, safe=False)
+
+
+class GroupSchedules:
+    def __init__(self):
+        self.json = {
+            'groups': []
+        }
+
+    def add(self, name, schedule):
+        self.json['groups'].append({'name': name, 'schedule': schedule.json_dict()})
+
+    def json_dict(self):
+        assert is_valid_json_dict(self.json), 'JSON representation in incomplete'
+        return self.json
+
+    def to_json_response(self):
+        return JsonResponse(self.json, safe=False)
+

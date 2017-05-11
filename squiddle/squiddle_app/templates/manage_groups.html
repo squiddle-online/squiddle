@@ -4,6 +4,8 @@
 {% block links%}
 <link rel="stylesheet" type="text/css" href="{% static "centered_container.css" %}">
 <link rel="stylesheet" type="text/css" href="{% static "manage_groups.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "create_group.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "search_bar.css" %}">
 {% endblock%}
 
 {% block asv%}
@@ -34,6 +36,33 @@
         <h1 class="col-title">Options</h1>
       </div>
       <div id="group-options">
+        <div id="member-options" class="hidden">
+        </div>
+        <div id="owner-options" class="">
+          <form id="member-search-form" class="search-form">
+            <div class="form-group row">
+              <div class="col-md-4 sf-col">
+                <label id="search-bar-label" for="search-bar">Invite Someone!</label>
+              </div>
+              <div class="col-md-8 sf-col">
+                <input id="search-bar" type="text" placeholder="Search.." style="display: flex;"/>
+                <ul class="search-results" style="position: relative;">
+                  <li>Username</li>
+                  <li>Username</li>
+                  <li>Username</li>
+                  <li>Username</li>
+                </ul>
+              </div>
+            </div>
+          </form>
+          <form id="group-edit-form">
+            {% include 'form.html' with form=group_edit_form %}
+            <div id="edit-group-button-container">
+              <button id="save-group-edits-button" class="btn btn-success">Save</button>
+              <button id="cancel-group-edits-button" class="btn btn-danger">Cancel</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

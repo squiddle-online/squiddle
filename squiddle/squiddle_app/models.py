@@ -35,12 +35,15 @@ class WeeklySchedule(models.Model):
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     timezone = TimeZoneField()
-    groups = models.ManyToManyField('MemberGroup', related_name='members',blank=True)
+    groups = models.ManyToManyField('MemberGroup', related_name='members', blank=True)
     # Not really nullable and will be handled through receivers
     free_time = models.ForeignKey(WeeklySchedule, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.user.username
+
+    def to_rest_data(self):
+        return rest_data.Member(name=self.user.username, id=self.pk, tz=str(self.timezone))
 
 
 class MemberGroup(models.Model):
@@ -52,6 +55,10 @@ class MemberGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+    def to_rest_data(self):
+        return rest_data.Group(name=self.name, id=self.pk, owner=self.owner.user.username,
+                               members=[m.to_rest_data().json_dict() for m in self.members.all()])
 
 
 class Notification(models.Model):

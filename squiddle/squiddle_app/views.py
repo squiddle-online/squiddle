@@ -4,8 +4,10 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse, HttpResponseBadRequest
 from .forms import *
 from .models import *
+
 
 def home(request):
     return redirect('view_schedules')
@@ -41,7 +43,10 @@ def create_group(request):
 
 @login_required
 def manage_groups(request):
-    return render(request, 'manage_groups.html')
+    if request.method == 'POST':
+        return HttpResponseBadRequest()
+
+    return render(request, 'manage_groups.html', context={'group_edit_form': GroupCreationForm()})
 
 
 @login_required

@@ -96,6 +96,49 @@ def decline_invitation(request, pk):
 
 
 @csrf_exempt
+def group_schedules(request):
+    if request.method == 'POST':
+        return HttpResponseBadRequest()
+
+    schedules = rest_data.GroupSchedules()
+    candidate = rest_data.WeeklySchedule()
+    candidate.add_block(rest_data.Day.MONDAY, [12, 0], [17, 0])
+    candidate.add_block(rest_data.Day.TUESDAY, [15, 0], [20, 0])
+    candidate.add_block(rest_data.Day.WEDNESDAY, [12, 0], [17, 0])
+    schedules.add('Group 1', candidate)
+
+    candidate = rest_data.WeeklySchedule()
+    candidate.add_block(rest_data.Day.MONDAY, [8, 0], [9, 0])
+    candidate.add_block(rest_data.Day.MONDAY, [10, 0], [11, 0])
+    candidate.add_block(rest_data.Day.WEDNESDAY, [10, 0], [15, 0])
+    schedules.add('Group 2', candidate)
+
+    candidate = rest_data.WeeklySchedule()
+    candidate.add_block(rest_data.Day.FRIDAY, [8, 0], [9, 0])
+    candidate.add_block(rest_data.Day.FRIDAY, [10, 0], [11, 0])
+    candidate.add_block(rest_data.Day.THURSDAY, [10, 0], [15, 0])
+    schedules.add('Group 3', candidate)
+
+    return schedules.to_json_response()
+
+
+@csrf_exempt
+def groups(request):
+    if request.method == 'POST':
+        return HttpResponseBadRequest()
+
+    member = request.user.member
+    group_list = rest_data.GroupList()
+    for g in models.MemberGroup.objects.filter(owner=member):
+        group_list.add_owner_of(g.to_rest_data())
+
+    for g in models.MemberGroup.objects.filter(members__in=[member]):
+        group_list.add_member_of(g.to_rest_data())
+
+    return group_list.to_json_response()
+
+
+@csrf_exempt
 def users(request):
     if request.method == 'GET':
         return HttpResponse()
@@ -108,5 +151,7 @@ url_patterns = [
     url(r'^notifications/remove/(\d+)$', remove_notification, name='remove_notification'),
     url(r'^notifications/accept-invitation/(\d+)$', accept_invitation, name='accept_invitation'),
     url(r'^notifications/decline-invitation/(\d+)$', decline_invitation, name='decline_invitation'),
+    url(r'^groups/schedules/$', group_schedules, name='groups'),
+    url(r'^groups/$', groups, name='groups'),
     url(r'^users/$', users, name='users')
 ]
