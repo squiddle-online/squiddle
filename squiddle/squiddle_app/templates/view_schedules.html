@@ -1,5 +1,37 @@
 {% extends 'schedule_with_controls.html' %}
 
+{% load static %}
+
+{% block extra-links%}
+    <link rel="stylesheet" href="{% static 'view_schedule.css'%}">
+{% endblock %}
+
 {% block controls %}
-<h1>View Schedules Controls Stub</h1>
+<div id="block-container" >
+<div id="title-container">
+    <h1 id="title">Select Group</h1>
+</div>
+    <div class="form-group" >
+        <label for="radio1" class="col-xs-10">Group Name <br />  <label class="colors blue"> </label></label>
+        <div class= "radio" >
+            <label>
+            <input type="radio" name="optionsRadios" id="radioid" value="option1" >
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="radio2" class="col-xs-10">Group Name <br /> <label class="colors green"></label> </label>
+        <div class="radio">
+            <label>
+            <input type="radio" name="optionsRadios" id="radioid" value="option2">
+            </label>
+
+        </div>
+    </div>
+    <div id="printbutton">
+
+        <input  type=button class="btn col-xs-offset-4" value="Print View" onClick="javacript:window.print()">
+
+    </div>
+</div>
 {% endblock%}

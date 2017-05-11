@@ -1,0 +1,42 @@
+#block-container{
+    height: 100%;
+    border: dashed;
+}
+#title-container{
+text-align: center;
+    width: 100%;
+}
+#title{
+    margin: 0px;
+    padding-bottom: 50px;
+    color: #333333;
+    font-weight: 700;
+    font-family: "Qwigley", sans-serif;
+    font-size: 58px;
+}
+
+.radio{
+ text-align: center;
+    padding-top: 15px;
+
+}
+.colors{
+    float: left;
+    width: 20px;
+    height: 20px;
+}
+.green{
+    background-color: #46ff36;
+}
+.blue{
+    background-color: darkblue;
+}
+
+#printbutton{
+    padding-top: 100%;
+}
+
+.btn{
+
+    outline:none;
+}
