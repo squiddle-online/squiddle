@@ -1,9 +1,76 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block links%}
-{% endblock%}
-{% block js%}
-{% endblock%}
-{% block asv%}
-<h1>Worked</h1>
+<link rel="stylesheet" type="text/css" href="{% static "centered_container.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "manage_groups.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "create_group.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "search_bar.css" %}">
 {% endblock%}
 
+{% block asv%}
+<div class="centered-container">
+  <div id="main-row" class="row-fluid">
+    <div id="owned-groups-container" class="col-xs-3">
+      <div id="owned-groups-title-container" class="col-title-container">
+        <h1 class="col-title">Groups where you are: <i><b>owner</b></i></h1>
+      </div>
+      <div id="owned-groups-list" class="list-group">
+        <div class="group-entry">
+          <p class="entry-text">Test</p>
+        </div>
+        <div class="group-entry">
+          <p class="entry-text">Test</p>
+        </div>
+      </div>
+    </div>
+    <div id="member-of-groups-container" class="col-xs-3">
+      <div id="member-of-groups-title-container" class="col-title-container">
+        <h1 class="col-title">Groups where you are: <i><b>member</b></i></h1>
+      </div>
+      <div id="member-of-groups-list">
+      </div>
+    </div>
+    <div id="group-options-container" class="col-xs-6">
+      <div id="group-options-title-container" class="col-title-container">
+        <h1 class="col-title">Options</h1>
+      </div>
+      <div id="group-options">
+        <div id="member-options" class="hidden">
+        </div>
+        <div id="owner-options" class="">
+          <form id="member-search-form" class="search-form">
+            <div class="form-group row">
+              <div class="col-md-4 sf-col">
+                <label id="search-bar-label" for="search-bar">Invite Someone!</label>
+              </div>
+              <div class="col-md-8 sf-col">
+                <input id="search-bar" type="text" placeholder="Search.." style="display: flex;"/>
+                <ul class="search-results" style="position: relative;">
+                  <li>Username</li>
+                  <li>Username</li>
+                  <li>Username</li>
+                  <li>Username</li>
+                </ul>
+              </div>
+            </div>
+          </form>
+          <form id="group-edit-form">
+            {% include 'form.html' with form=group_edit_form %}
+            <div id="edit-group-button-container">
+              <button id="save-group-edits-button" class="btn btn-success">Save</button>
+              <button id="cancel-group-edits-button" class="btn btn-danger">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+{% endblock%}
+
+
+{% block js%}
+  <script type="text/JavaScript" src="{% static "manage_groups.js" %}"></script>
+{% endblock%}
