@@ -86,7 +86,8 @@
     font-weight: bold;
 }
 
-.selected-entry {
+.selected,
+.selected:hover {
     border: 2px solid rgba(181, 205, 255, 1);
 }
 
@@ -102,9 +103,14 @@
     height: 40px;
 }
 
+#invite-member-button {
+    height: 35px;
+    margin-top: 20px;
+}
+
 #disband-group-button {
     position: absolute;
-    width: 200px;
+    width: 50%;
     bottom: 0;
 }
 

@@ -39,23 +39,24 @@
           </div>
         </div>
         <div id="owner-options" class="hidden">
-          <form id="member-search-form" class="search-form">
+          <form id="member-search-form" class="search-form" onsubmit="event.preventDefault();">
             <div class="form-group row">
               <div class="col-md-4 sf-col">
                 <label id="search-bar-label" for="search-bar">Invite Someone!</label>
               </div>
               <div class="col-md-8 sf-col">
-                <input id="search-bar" type="text" placeholder="Search.." style="display: flex;"/>
-                <ul class="search-results hidden" style="position: relative;">
+                <input id="search-bar" type="text" placeholder="Search.." style="display: flex;" autocomplete="false"/>
+                <ul id="user-list" class="search-results hidden" style="position: relative;">
                 </ul>
+                <button id="invite-member-button" type="button" class="btn btn-primary">Invite</button>
               </div>
             </div>
           </form>
           <form id="group-edit-form">
             {% include 'form.html' with form=group_edit_form %}
             <div id="edit-group-button-container">
-              <button id="save-group-edits-button" class="btn btn-success">Save</button>
-              <button id="cancel-group-edits-button" class="btn btn-default">Cancel</button>
+              <button id="save-group-edits-button" type="button" class="btn btn-success">Save</button>
+              <button id="cancel-group-edits-button" type="button" class="btn btn-default">Cancel</button>
             </div>
           </form>
           <button id="disband-group-button" class="btn btn-danger">Disband</button>
