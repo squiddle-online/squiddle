@@ -3,37 +3,39 @@
 {% csrf_token %}
 {% if form.non_field_errors %}
 <div id="non-field-error-box" class="row">
-    {% for error in form.non_field_errors%}
-    <ul class="errorlist">
-        <li>{{ error }}</li>
-    </ul>
-    {% endfor%}
+  {% for error in form.non_field_errors%}
+  <ul class="errorlist">
+    <li>{{ error }}</li>
+  </ul>
+  {% endfor%}
 </div>
 {% endif %}
 {% for field in form %}
 <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-8">
-        {{ field.errors }}
-    </div>
+  <div class="col-md-4"></div>
+  <div class="col-md-8">
+    {{ field.errors }}
+  </div>
 </div>
 <div class="form-group row">
-    <div id="label-box">
-        <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label">{{ field.label }}{{ form.label_suffix }}</label>
-    </div>
-    <div class="col-md-8">
-        {% if field.field.widget|widget_type == 'Select' %}
-            <select class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}">
-                {% for c in field.field.choices %}
-                    <option>{{ c.0 }}</option>
-                {% endfor %}
-            </select>
-        {% else %}
-            <input class="form-control" id="{{ field.id_for_label}}" type="{{ field|field_type}}" name="{{ field.name }}">
-            {% if field.help_text %}
-                <p class="helptext">{{ field.help_text|safe }}</p>
-            {% endif %}
-        {% endif %}
-    </div>
+  <div id="label-box">
+    <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label">{{ field.label }}{{ form.label_suffix }}</label>
+  </div>
+  <div class="col-md-8">
+    {% if field.field.widget|widget_type == 'Select' %}
+    <select class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}">
+      {% for c in field.field.choices %}
+      <option>{{ c.0 }}</option>
+      {% endfor %}
+    </select>
+    {% elif field.field.widget|widget_type == 'Textarea' %}
+    <textarea class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}">{{field.value}}</textarea>
+    {% else %}
+    <input class="form-control" id="{{ field.id_for_label}} " type="{{ field|field_type }}" name="{{ field.name }}" value="{{field.value}}"/>
+    {% endif %}
+    {% if field.help_text %}
+    <p class="helptext">{{ field.help_text|safe }}</p>
+    {% endif %}
+  </div>
 </div>
 {% endfor %}

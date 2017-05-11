@@ -13,3 +13,7 @@ class MemberAdmin(admin.ModelAdmin):
 class MemberGroupAdmin(admin.ModelAdmin):
     exclude = ['schedule']
 
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    pass

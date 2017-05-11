@@ -144,11 +144,8 @@ function showFreeTime() {
     scheduleManager.hide();
     scheduleManager.clamp(freeTime.getFirstHour(), freeTime.getLastHour());
 
-    console.log(freeTime.repr);
     for (const day of freeTime.days()) {
-        console.log("here");
         for (const b of freeTime.blocks()[day]) {
-            console.log("here");
             scheduleManager.addTimeBlock(day, b[0], b[1]);
         }
     }
@@ -192,6 +189,8 @@ function populateBlockList(day) {
         entry.appendChild(button);
         list.appendChild(entry);
     }
+
+    showFreeTime();
 }
 
 /** Reload the page from the server, which will require the user to login if their session has expired */

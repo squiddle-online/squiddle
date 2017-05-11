@@ -15,15 +15,9 @@ const GroupColorPallet = [
 ];
 
 var ScheduleManager = function(type) {
-    // TODO: grab the schedule table by id and setup anything else.
     var scheduleTable = document.getElementById("table");
     var hourContainer = scheduleTable.getElementsByClassName("hour-container");
-
-
     this.type = type;
-
-    // TODO: the table needs to be invisible by default, so the user doesn't
-    // see anything until their schedule is populated.
     this.visible = false;
 };
 
@@ -32,6 +26,7 @@ ScheduleManager.prototype.type = function() {
 }
 
 ScheduleManager.prototype.addTimeBlock = function(day, start, end, groupNumber = -1) {
+    var initialStart = start[0];
     var scheduleTable = document.getElementById("table");
     var hourContainer = scheduleTable.getElementsByClassName("hour-container");
     if (groupNumber != -1 && this.type == ScheduleType.FREE_TIME)
@@ -40,28 +35,42 @@ ScheduleManager.prototype.addTimeBlock = function(day, start, end, groupNumber =
         throw "Tried to add a free time block to a group schedule.";
 
     if (this.type == ScheduleType.FREE_TIME) {
+<<<<<<< HEAD
         var temp = start[0];
         
         while (temp < end[0]) {
           var block = (temp * 7) + day;
           hourContainer[block].style.backgroundColor = GroupColorPallet[0];
           temp++;
+=======
+        while (start[0] < end[0]) {
+            var block = (start[0] * 7) + day;
+            hourContainer[block].style.backgroundColor = GroupColorPallet[0];
+            start[0]++;
+>>>>>>> ade902f29e3079a0959eec6862e3cc4f4256d49f
         }
-        return;
     }
-
-    // TODO: Add a group block using groupNumber to lookup colors in the GroupColorPallet or whatever works.
+    
+    // reset start value
+    start[0] = initialStart;
 };
 
 ScheduleManager.prototype.removeTimeBlock = function(day, start, end) {
     var scheduleTable = document.getElementById("table");
     var hourContainer = scheduleTable.getElementsByClassName("hour-container");
+<<<<<<< HEAD
     var temp = start[0]
     while (temp < end[0]) {
       console.log("removing block");
       var block = (temp * 7) + day;
       hourContainer[block].style.backgroundColor = "#AFEFAF";
       temp++;
+=======
+    while (start[0] < end[0]) {
+      var block = (start[0] * 7) + day;
+      hourContainer[block].style.backgroundColor = "white";
+      start[0]++;
+>>>>>>> ade902f29e3079a0959eec6862e3cc4f4256d49f
     }
 };
 
