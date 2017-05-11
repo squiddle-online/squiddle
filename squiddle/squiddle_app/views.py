@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm
 from .forms import *
 from .models import *
 
@@ -49,9 +50,35 @@ def view_schedules(request):
     return render(request, 'view_schedules.html')
 
 
-@login_required
 def profile(request):
-    return render(request, 'profile.html')
+    if request.method == 'POST':
+        #user_form = UserEditForm(request.user, request.POST)
+        password_form = PasswordChangeForm(request.user, request.POST)
+        member_form = MemberCreationForm(request.POST)
+        if password_form.is_valid() and member_form.is_valid():
+            newPassword = password_form.save()
+            newPassword.refresh_from_db()
+            user = request.user
+            #user.username = user_form
+            #user = authenticate(username=user.username, password=newPassword)
+            user.refresh_from_db()
+            user.member.timezone = member_form.cleaned_data['timezone']
+            user.save()
+            return redirect ('home')
+        else:
+            print("test")
+            #messages.error(request, 'Please correct the error below')
+    else:
+        #user_form = UserEditForm()
+        password_form = PasswordChangeForm(request.user)
+        member_form = MemberCreationForm()
+    return render(request, 'profile.html', context={'password_form' : password_form, 'member_form': member_form})
+
+
+
+
+
+    #return render(request, 'profile.html')
 
 
 def signup(request):
