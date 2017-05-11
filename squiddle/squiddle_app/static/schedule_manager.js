@@ -35,24 +35,26 @@ ScheduleManager.prototype.addTimeBlock = function(day, start, end, groupNumber =
         throw "Tried to add a free time block to a group schedule.";
 
     if (this.type == ScheduleType.FREE_TIME) {
-        while (start[0] < end[0]) {
-            var block = (start[0] * 7) + day;
-            hourContainer[block].style.backgroundColor = GroupColorPallet[0];
-            start[0]++;
+        var temp = start[0];
+        
+        while (temp < end[0]) {
+          var block = (temp * 7) + day;
+          hourContainer[block].style.backgroundColor = GroupColorPallet[0];
+          temp++;
         }
     }
-    
-    // reset start value
-    start[0] = initialStart;
 };
 
 ScheduleManager.prototype.removeTimeBlock = function(day, start, end) {
     var scheduleTable = document.getElementById("table");
     var hourContainer = scheduleTable.getElementsByClassName("hour-container");
-    while (start[0] < end[0]) {
-      var block = (start[0] * 7) + day;
+
+    var temp = start[0]
+    while (temp < end[0]) {
+      console.log("removing block");
+      var block = (temp * 7) + day;
       hourContainer[block].style.backgroundColor = "white";
-      start[0]++;
+      temp++;
     }
 };
 
@@ -62,12 +64,14 @@ ScheduleManager.prototype.clamp = function(minHour, maxHour) {
 
 /** Hides the schedule table, making it invisible. */
 ScheduleManager.prototype.hide = function() {
-    // TODO:
+    var scheduleTable = document.getElementById("table");
+    scheduleTable.style.visible = "hidden";
 };
 
 /** Shows the schedule table. */
 ScheduleManager.prototype.show = function() {
-    // TODO:
+    var scheduleTable = document.getElementById("table");
+    scheduleTable.style.visible = "visible";
 };
 
 /** Checks whether the schedule is visible.
