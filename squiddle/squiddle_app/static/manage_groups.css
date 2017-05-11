@@ -102,10 +102,22 @@
     height: 40px;
 }
 
+#disband-group-button {
+    position: absolute;
+    width: 200px;
+    bottom: 0;
+}
+
 #member-search-form .search-form {
     width: 100%;
 }
 
 #member-search-form {
     margin-bottom: 100px;
+}
+
+/* Member group objects */
+#leave-group-button {
+    margin-left: auto;
+    margin-right: auto;
 }

@@ -58,6 +58,7 @@ class MemberGroup(models.Model):
 
     def to_rest_data(self):
         return rest_data.Group(name=self.name, id=self.pk, owner=self.owner.user.username,
+                               description=self.description,
                                members=[m.to_rest_data().json_dict() for m in self.members.all()])
 
 

@@ -222,6 +222,7 @@ class Group:
             'id': kwargs['id'],
             'owner': kwargs['owner'],
             'members': kwargs['members'],
+            'description': kwargs['description'],
         }
 
         self.members = self.json['members']
@@ -249,6 +250,12 @@ class Group:
 
     def add_member(self, member):
         self.members.append(member.json_dict())
+
+    def get_description(self):
+        return self.json['description']
+
+    def set_description(self, desc):
+        self.json['description'] = desc
 
     def json_dict(self):
         assert is_valid_json_dict(self.json), 'JSON representation is incomplete'
