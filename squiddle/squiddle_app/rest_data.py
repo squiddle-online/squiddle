@@ -305,3 +305,20 @@ class GroupSchedules:
     def to_json_response(self):
         return JsonResponse(self.json, safe=False)
 
+
+class MemberList:
+    def __init__(self):
+        self.json = {
+            'users': []
+        }
+
+    def add_member(self, member):
+        self.json['users'].append(member.json_dict())
+
+    def json_dict(self):
+        assert is_valid_json_dict(self.json), 'JSON representation in incomplete'
+        return self.json
+
+    def to_json_response(self):
+        assert is_valid_json_dict(self.json), 'JSON representation in incomplete'
+        return JsonResponse(self.json, safe=False)

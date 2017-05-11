@@ -80,9 +80,8 @@ class Notification(models.Model):
     data = JSONField()
 
     @classmethod
-    def create_invitation(cls, group, username):
-        target_user = User.objects.get(username=username)
-        return Notification(sender=group.owner, receiver=target_user.member,
+    def create_invitation(cls, group, member):
+        return Notification(sender=group.owner, receiver=member,
                             type=Notification.Type.INVITATION,
                             data={'group_name': group.name, 'group_id': group.pk})
 

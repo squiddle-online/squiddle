@@ -32,9 +32,20 @@ def get_notifications(request):
 
 
 @csrf_exempt
-def add_notification(request):
-    if request.method == 'POST':
-        return HttpResponse()
+def invite(request, gpk, mpk):
+    if request.method == 'GET':
+        return HttpResponseBadRequest()
+
+    try:
+        member = models.Member.objects.get(pk=mpk)
+        group = models.MemberGroup.objects.get(pk=gpk, owner=request.user.member)
+        if member in group.members.all():
+            return HttpResponse()
+
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest()
+
+    models.Notification.create_invitation(group, member).save()
 
     return HttpResponse()
 
@@ -140,7 +151,7 @@ def groups(request):
 
 @csrf_exempt
 def edit_group(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         return HttpResponseBadRequest()
 
     try:
@@ -151,32 +162,60 @@ def edit_group(request):
     try:
         name = json_dict['name']
         description = json_dict['description']
+        pk = json_dict['id']
     except KeyError:
         return HttpResponseBadRequest()
 
-    g = models.MemberGroup.objects.get(name=name)
-    if g.owner != request.user.member:
+    try:
+        g = models.MemberGroup.objects.get(owner=request.user.member, pk=pk)
+    except ObjectDoesNotExist:
         return HttpResponseBadRequest()
 
     g.name = name
     g.description = description
+    g.save()
+    return HttpResponse()
 
 
 @csrf_exempt
-def users(request):
+def leave_group(request, group_id):
     if request.method == 'GET':
-        return HttpResponse()
+        return HttpResponseBadRequest()
+
+    member = request.user.member
+    try:
+        group = models.MemberGroup.objects.get(pk=group_id, members__in=[member])
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest()
+
+    group.members.remove(member)
+    group.save()
+
+    return HttpResponse()
+
+
+@csrf_exempt
+def users(request, startswith):
+    if request.method == 'POST':
+        return HttpResponseBadRequest()
+
+    l = rest_data.MemberList()
+    for u in models.User.objects.filter(username__startswith=startswith):
+        l.add_member(u.member.to_rest_data())
+
+    return l.to_json_response()
 
 
 url_patterns = [
     url(r'^free-time/$', free_time, name='free_time'),
     url(r'^notifications/get/$', get_notifications, name='get_notifications'),
-    url(r'^notifications/add/$', remove_notification, name='add_notification'),
+    url(r'^notifications/invite/(\d+)/(\d+)$', invite, name='invite'),
     url(r'^notifications/remove/(\d+)$', remove_notification, name='remove_notification'),
     url(r'^notifications/accept-invitation/(\d+)$', accept_invitation, name='accept_invitation'),
     url(r'^notifications/decline-invitation/(\d+)$', decline_invitation, name='decline_invitation'),
     url(r'^groups/schedules/$', group_schedules, name='groups_schedules'),
     url(r'^groups/edit/$', edit_group, name='groups_edit'),
+    url(r'^groups/leave/(\d+)$', leave_group, name='groups_leave'),
     url(r'^groups/$', groups, name='groups'),
-    url(r'^users/$', users, name='users')
+    url(r'^users/(\S+)$', users, name='users')
 ]
