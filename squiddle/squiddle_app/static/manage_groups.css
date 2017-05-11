@@ -20,7 +20,7 @@
 
 #owned-groups-list {
     height: 100%;
-    border-right: 1px solid #DDDDDD;
+    border-right: 1px solid #AAAAAA;
     overflow-y: auto;
 }
 
@@ -30,7 +30,7 @@
 
 #member-of-groups-list {
     height: 100%;
-    border-right: 1px solid #DDDDDD;
+    border-right: 1px solid #AAAAAA;
     overflow-y: auto;
     margin-bottom: 20px;
 }
@@ -70,10 +70,24 @@
     border-left: 2px solid #333333;
 }
 
+.member-of-group-entry {
+    background-color: #EEEEFF;
+}
+
+.owned-group-entry {
+    background-color: #FFEFEE;
+}
+
 .entry-text {
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
     font-family: "Open Sans";
+    font-style: italic;
     font-weight: bold;
+}
+
+.selected-entry {
+    border: 2px solid rgba(181, 205, 255, 1);
 }
 
 
