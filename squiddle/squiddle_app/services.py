@@ -83,6 +83,7 @@ def accept_invitation(request, pk):
     group.members.add(member)
     confirmation = models.Notification.create_invitation_accepted(sender=member, receiver=group.owner)
     confirmation.save()
+    group.save()
 
     return HttpResponse()
 
